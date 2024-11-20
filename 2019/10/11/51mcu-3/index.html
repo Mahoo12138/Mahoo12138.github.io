@@ -1,38 +1,26 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>51单片机学习之数码管 [ Mahoo12138 ]</title><link rel="stylesheet" href="/css/index.css"><meta name="post"><link rel="stylesheet" href="/css/layouts/post.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="hexo-container"><header></header><main id="content"><article id="post"><h1>51单片机学习之数码管</h1><h2 id="段选和位选"><a href="#段选和位选" class="headerlink" title="段选和位选"></a>段选和位选</h2><p>例如，你要控制四个数码管，依次是1，2，3，4，你要选择哪一个数码管（一个数码管即为一个“日”）这就是<strong>位选</strong>，顾名思义为选择位置；之后你要让选择的数码管显示某一个数字或符号，你就要控制数码管的a,b,c,d,e,f,g这七个发光二极管，让其亮或灭，这就是<strong>段选</strong>，顾名思义为选择数码管的哪一段。</p>
-<h2 id="数据存储类型"><a href="#数据存储类型" class="headerlink" title="数据存储类型"></a>数据存储类型</h2><ul>
-<li><p><strong>程序存储器（code）</strong></p>
-<p>程序存储区（64KB），<u>可直接理解为ROM</u>，只读，可由汇编操作码<code>MOVC @A DPTR</code>访问，8051系列仅执行存储在code中的程序；</p>
-</li>
-<li><p><strong>内部数据存储</strong></p>
-<p>对内部数据存储器的访问是非常快的，因为使用8位地址寻址；</p>
-<ul>
-<li><p><strong>data</strong></p>
-<p>可直接寻址的内部数据存储器（128字节），<u>可直接理解为内部RAM</u>，读写速度最快；</p>
-</li>
-<li><p><strong>idata</strong></p>
-<p>间接可寻址内部数据存储器（256字节），其中前128字节和data的128字节完全相同，只是访问方法不一样；</p>
-</li>
-<li><p><strong>bdata</strong></p>
-<p>可位寻址的内部数据存储器（<code>20h to 2Fh</code> 16字节），支持混合位和字节访问。</p>
-</li>
-</ul>
-</li>
-<li><p><strong>外部数据存储</strong></p>
-<p>可读写，由于外部数据存储器是通过指针寄存器间接访问的，所以访问速度要比内部数据存储器慢，</p>
-<ul>
-<li><p><strong>xdata</strong></p>
-<p>外部数据存储器（64KB），<u>可直接理解外部RAM</u>，可由汇编操作码<code>MOVX @DPTR</code>访问，Large Memory Model在此内存空间中定义变量；</p>
-</li>
-<li><p><strong>pdata</strong></p>
-<p>分页寻址外部数据存储器，其指定外部存储器中的一页（256字节），由操作码<code>MOVX @Rn</code>访问；Compact Memory Model在此内存空间中定义变量。</p>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="程序代码"><a href="#程序代码" class="headerlink" title="程序代码"></a>程序代码</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;reg52.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;intrins.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> uint unsigned int</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">sbit a = P2 ^ <span class="number">4</span>;</span><br><span class="line">sbit b = P2 ^ <span class="number">5</span>;</span><br><span class="line">sbit c = P2 ^ <span class="number">6</span>;</span><br><span class="line">sbit d = P2 ^ <span class="number">7</span>;</span><br><span class="line"></span><br><span class="line">sbit fm = P2 ^ <span class="number">3</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//定义数码管段选的方式</span></span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span> code sz[<span class="number">17</span>] = &#123;<span class="number">0x3f</span>,<span class="number">0x06</span>,<span class="number">0x5b</span>,<span class="number">0x4f</span>,<span class="number">0x66</span>,<span class="number">0x6d</span>,<span class="number">0x7d</span>,<span class="number">0x07</span>,<span class="number">0x7f</span>,<span class="number">0x6f</span>,<span class="number">0x77</span>,<span class="number">0x7c</span>,<span class="number">0x39</span>,<span class="number">0x5e</span>,<span class="number">0x79</span>,<span class="number">0x71</span>,<span class="number">0x00</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">*延迟函数</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">Delay</span><span class="params">(uint ms)</span>&#123;</span><br><span class="line">	uint i ,j;</span><br><span class="line">	<span class="keyword">for</span>(i = ms; i &gt; <span class="number">0</span>; i--)&#123;</span><br><span class="line">		<span class="keyword">for</span>(j = <span class="number">112</span>; j&gt;<span class="number">0</span>; j--);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">*位选数码管函数</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">Led</span><span class="params">(<span class="type">int</span> id)</span>&#123;</span><br><span class="line">	<span class="keyword">switch</span>(id)&#123;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">			a = <span class="number">1</span>;b = <span class="number">0</span>;c = <span class="number">0</span>;d = <span class="number">0</span>;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">2</span>:</span><br><span class="line">			a = <span class="number">0</span>;b = <span class="number">1</span>;c = <span class="number">0</span>;d = <span class="number">0</span>;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">3</span>:</span><br><span class="line">			a = <span class="number">0</span>;b = <span class="number">0</span>;c = <span class="number">1</span>;d = <span class="number">0</span>;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> <span class="number">4</span>:</span><br><span class="line">			a = <span class="number">0</span>;b = <span class="number">0</span>;c = <span class="number">0</span>;d = <span class="number">1</span>;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">default</span>:</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">	<span class="type">int</span> i = <span class="number">0</span>;</span><br><span class="line">	Led(<span class="number">1</span>);</span><br><span class="line">	<span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">    	P1 = <span class="number">0xfe</span>;</span><br><span class="line">		<span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i++)&#123;</span><br><span class="line">			Led(<span class="number">4</span> - (i%<span class="number">4</span>));</span><br><span class="line">			P0 = sz[<span class="number">8</span> - i];</span><br><span class="line">			fm = <span class="number">0</span>;</span><br><span class="line">			Delay(<span class="number">100</span>);	</span><br><span class="line">			fm = <span class="number">1</span>;</span><br><span class="line">			</span><br><span class="line">			Delay(<span class="number">1000</span>);</span><br><span class="line">			P1 = _crol_(P1,<span class="number">1</span>);</span><br><span class="line">			</span><br><span class="line">		&#125; </span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<!DOCTYPE html>
+<html lang="<%= config.language %>" color-mode="light">
 
-<p>可以看看这个数组定义：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">unsigned</span> <span class="type">char</span> code sz[<span class="number">17</span>] = &#123;<span class="number">0x3f</span>,<span class="number">0x06</span>,<span class="number">0x5b</span>,<span class="number">0x4f</span>,<span class="number">0x66</span>,<span class="number">0x6d</span>,<span class="number">0x7d</span>,<span class="number">0x07</span>,<span class="number">0x7f</span>,<span class="number">0x6f</span>,<span class="number">0x77</span>,<span class="number">0x7c</span>,<span class="number">0x39</span>,<span class="number">0x5e</span>,<span class="number">0x79</span>,<span class="number">0x71</span>,<span class="number">0x00</span>&#125;;</span><br></pre></td></tr></table></figure>
+  <%- partial('_partial/header') %>
 
-<p>其中code是一个域修饰符，它指定该数组存储在程序存储区，写入后不可更改。</p>
-</article><div id="paginator"></div></main><footer><div class="icon-wrapper in-left"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg></span></button></div><div class="icon-wrapper in-right"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg></span></button></div><p class="copyright-text"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">CC BY-NC-SA 4.0</a><span>·</span><a href="https://github.com/ttttonyhe/ouorz-mono" target="_blank" rel="noreferrer">Open Source Software (OSS)</a></p></footer><script src="/js/ouo.js"></script></div></body></html>
+  <body>
+    <div id="app">
+      <%- partial('_partial/navigation') %>
+
+      <div class="flex-container">
+        <%- body %>
+        <%- partial('_partial/footer') %>
+      </div>
+
+      <div class="tools-bar">
+        <%- partial('_partial/backtotop') %>
+
+        <%- partial('_partial/search') %>
+
+        <%- partial('_partial/colorscheme') %>
+
+        <%- partial('_partial/shares') %>
+      </div>
+    </div>
+  </body>
+</html>

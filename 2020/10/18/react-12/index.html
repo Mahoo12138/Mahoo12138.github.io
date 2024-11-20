@@ -1,73 +1,26 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>前端学习之React中的Hooks学习 [ Mahoo12138 ]</title><link rel="stylesheet" href="/css/index.css"><meta name="post"><link rel="stylesheet" href="/css/layouts/post.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="hexo-container"><header></header><main id="content"><article id="post"><h1>前端学习之React中的Hooks学习</h1><h2 id="什么是-Hooks"><a href="#什么是-Hooks" class="headerlink" title="什么是 Hooks"></a>什么是 Hooks</h2><p>Hook 是 React 16.8 的新增特性。它可以让你在不编写 class 的情况下使用 state 以及其他的 React 特性；</p>
-<p>Hook 本质是一个特殊的函数，它可以让你“钩入” React 的特性。例如，<code>useState</code> 是允许你在 React 函数组件中添加 state 的 Hook；</p>
-<p>Hooks 没有做破坏性改动，是完全向后兼容，而且是可选择的，也就是说没必要使用 Hooks 重构之前的应用；</p>
-<p>Hooks 采取渐进式的使用策略，也就是说没有计划从 React 中移除 class，且将继续为 class 组件提供支持；</p>
-<h2 id="为什么使用-Hooks"><a href="#为什么使用-Hooks" class="headerlink" title="为什么使用 Hooks"></a>为什么使用 Hooks</h2><ul>
-<li><strong>在组件之间复用状态逻辑很难</strong>，Hook 使你在无需修改组件结构的情况下复用状态逻辑；</li>
-<li><strong>复杂组件变得难以理解</strong>，Hook 将组件中相互关联的部分拆分成更小的函数（比如设置订阅或请求数据）；</li>
-<li><strong>难以理解的 class</strong>，Hook 使你在非 class 的情况下可以使用更多的 React 特性；</li>
-</ul>
-<h2 id="常用的-Hook"><a href="#常用的-Hook" class="headerlink" title="常用的 Hook"></a>常用的 Hook</h2><h3 id="useState"><a href="#useState" class="headerlink" title="useState"></a>useState</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">const [count, setCount] = useState(0);</span><br></pre></td></tr></table></figure>
+<!DOCTYPE html>
+<html lang="<%= config.language %>" color-mode="light">
 
-<p>参数：定义状态的初始化值，可直接传递状态，如初始状态需要复杂计算获得也可以传递返回状态的函数；</p>
-<p>返回值：一个数组，包含将创建的状态和更新状态的函数，该函数可传入新的状态或接受旧状态返回新状态的函数；</p>
-<blockquote>
-<p>参数只会在组件的初始渲染中起作用，后续渲染时会被忽略；</p>
-<p>如果需要多个状态，则调用多次<code>useState</code>函数即可，通常<strong>不必</strong>使用多个 state 变量。State 变量可以很好地存储对象和数组；</p>
-</blockquote>
-<h3 id="useEffect"><a href="#useEffect" class="headerlink" title="useEffect"></a>useEffect</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">useEffect(() =&gt; &#123;</span><br><span class="line">    document.title = `You clicked $&#123;count&#125; times`;</span><br><span class="line">&#125;, [count]);</span><br></pre></td></tr></table></figure>
+  <%- partial('_partial/header') %>
 
-<p>参数：第一个参数是一个包含命令式、且可能有<strong>副作用</strong>代码的函数，会在执行 DOM 更新后被调用；其二是一个数组，此参数来控制包裹的函数 effect 是否执行，可以提升一定的性能；传入空的依赖数组 <code>[]</code>，意味着该 Effect Hook 只会在组件挂载时运行一次；</p>
-<blockquote>
-<p>若第二个参数不传递，则该Effect每次组件刷新都会执行，相当于类组件中的<code>componentDidMount</code>和<code>componentDidupdate</code>生命周期的结合；</p>
-</blockquote>
-<p>大多情况下，我们希望在组件加载和更新时执行同样的操作，而类组件则需要<code>componentDidMount</code>和<code>componentDidupdate</code>中执行重复的代码才能完成需求；</p>
-<p>对于需要清除的 effect，如订阅外部数据源，与监听事件等操作，为防止内存泄露，在类组件中通常会在 <code>componentDidMount</code> 中设置订阅，并在 <code>componentWillUnmount</code> 中清除；这是很紧密的逻辑却被这两个生命周期函数强行给拆分了；useEffect 的设计给出了优雅的解决：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">useEffect(() =&gt; &#123;</span><br><span class="line">    element.addEventListener(&quot;click&quot;, function()&#123; alert(&quot;Hello World!&quot;); &#125;);</span><br><span class="line">    return () =&gt; &#123;</span><br><span class="line">        element.removeEventListener(&quot;click&quot;, myFunction);</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+  <body>
+    <div id="app">
+      <%- partial('_partial/navigation') %>
 
-<blockquote>
-<p>这就相当于将 <code>componentWillUnmount</code>生命周期也结合了；</p>
-</blockquote>
-<p>总结，通过 useEffect 可以告诉 React 组件需要在渲染后执行某些操作，也能在组件卸载时执行操作；</p>
-<p>此外，可创建多个 Effect Hook 将类组件生命周期中多个不同的业务逻辑进行分离；</p>
-<blockquote>
-<p>注意，因为副效应函数默认是每次渲染都会执行，其<strong>清理函数</strong>（回调函数返回的函数）在<em>每次副效应函数重新执行之前，也会执行一次</em>，用来清理上一次渲染的副效应；故清理函数在每次重新渲染时都会执行而不是只在卸载组件的时候执行一次；这可以帮助我们创建 bug 更少的组件；</p>
-</blockquote>
-<h3 id="useContext"><a href="#useContext" class="headerlink" title="useContext"></a>useContext</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">const ThemeContext = React.createContext(...);</span><br><span class="line">const value = useContext(ThemeContext);</span><br></pre></td></tr></table></figure>
+      <div class="flex-container">
+        <%- body %>
+        <%- partial('_partial/footer') %>
+      </div>
 
-<p>接收一个 context 对象（<code>React.createContext</code> 的返回值）并返回该 context 的当前值。当前的 context 值由上层组件中距离当前组件最近的 <code>&lt;ThemeContext.Provider&gt;</code> 的 <code>value</code> prop 决定。</p>
-<ul>
-<li><code>&lt;ThemeContext.Provider&gt;</code> 更新时，该 Hook 会触发重渲染；</li>
-<li><code>useContext</code> 的参数必须是 <em>context 对象本身</em>；</li>
-</ul>
-<h3 id="useReducer"><a href="#useReducer" class="headerlink" title="useReducer"></a>useReducer</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">const [state, dispatch] = useReducer(reducer, initialArg, init);</span><br></pre></td></tr></table></figure>
+      <div class="tools-bar">
+        <%- partial('_partial/backtotop') %>
 
-<p>参数：其一为 reducer 纯函数，其二是是初始的state，最后可以修改初始state，将初始 state 设置为 init(initialArg)；</p>
-<p>useState 的加强版，适用于 state 逻辑较复杂且包含多个子值，或者下一个 state 依赖于之前的 state 等情况；</p>
-<p>如果 Reducer Hook 的返回值与当前 state 相同，React 将跳过子组件的渲染及副作用的执行；</p>
-<h3 id="useCallback"><a href="#useCallback" class="headerlink" title="useCallback"></a>useCallback</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">const memoizedCallback = useCallback(</span><br><span class="line">  () =&gt; &#123;</span><br><span class="line">    doSomething(a, b);</span><br><span class="line">  &#125;,</span><br><span class="line">  [a, b],</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+        <%- partial('_partial/search') %>
 
-<p><code>useCallback</code> 把内联回调函数及依赖项数组作为参数传入，返回原函数的<a target="_blank" rel="noopener" href="https://link.segmentfault.com/?enc=2EiR0R0Nh3eghxaOnbtttA==.5hxAjOyHvCPeuKfuvcmHuc4AbdU75+7JThTarg29kc2WibVENbIzlGv3wKFeAFzR">memoized</a>函数，在依赖项 a 和 b 都没有改变时，总是返回同一个函数；<code>useCallback(fn, deps)</code> 相当于 <code>useMemo(() =&gt; fn, deps)</code>；</p>
-<blockquote>
-<p><strong>记忆化</strong>（英语：memoization）是一种提高计算机程序执行速度的优化技术。通过储存大计算量函数的返回值，当这个结果再次被需要时将其从缓存提取，而不用再次计算来节省计算时间。</p>
-<p>记忆化是一种典型的在计算时间与电脑存储器空间之中获取平衡的方案；</p>
-</blockquote>
-<h3 id="useMemo"><a href="#useMemo" class="headerlink" title="useMemo"></a>useMemo</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">const memoizedValue = useMemo(() =&gt; computeExpensiveValue(a, b), [a, b]);</span><br></pre></td></tr></table></figure>
+        <%- partial('_partial/colorscheme') %>
 
-<p>把“创建”函数和依赖项数组作为参数传入 <code>useMemo</code>，与 <code>useCallback</code> 类似，返回一个 memoized 函数执行结果（值）；如果没有提供依赖项数组，<code>useMemo</code> 在每次渲染时都会计算新的值；</p>
-<h3 id="useRef"><a href="#useRef" class="headerlink" title="useRef"></a>useRef</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">const refContainer = useRef(initialValue);</span><br></pre></td></tr></table></figure>
-
-<p>类似 <code>react.createRef()</code>，<code>useRef</code> 返回一个可变的 ref 对象，其 <code>.current</code> 属性被初始化为传入的参数（<code>initialValue</code>）。返回的 ref 对象在组件的整个生命周期内持续存在；</p>
-<h3 id="useImperativeMethods"><a href="#useImperativeMethods" class="headerlink" title="useImperativeMethods"></a>useImperativeMethods</h3><p><code>useImperativeMethods</code> 提供了父组件直接调用子组件实例方法的能力，应当与 <a target="_blank" rel="noopener" href="https://zh-hans.reactjs.org/docs/react-api.html#reactforwardref"><code>forwardRef</code></a> 一起使用：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">function FancyInput(props, ref) &#123;</span><br><span class="line">  const inputRef = useRef();</span><br><span class="line">  useImperativeHandle(ref, () =&gt; (&#123;</span><br><span class="line">    focus: () =&gt; &#123;</span><br><span class="line">      inputRef.current.focus();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;));</span><br><span class="line">  return &lt;input ref=&#123;inputRef&#125; ... /&gt;;</span><br><span class="line">&#125;</span><br><span class="line">FancyInput = forwardRef(FancyInput);</span><br></pre></td></tr></table></figure>
-
-<h2 id="Hooks-使用规则"><a href="#Hooks-使用规则" class="headerlink" title="Hooks 使用规则"></a>Hooks 使用规则</h2><ul>
-<li>只在函数内部最顶层使用 Hook，不要在循环，条件或嵌套函数中调用 Hook；</li>
-<li>只在 React 函数中调用 Hook，不要在普通的 JavaScript 函数中调用 Hook；</li>
-</ul>
-<blockquote>
-<p>单个组件中编写多个<code>hook</code>，它们的每次<strong>调用顺序是由书写的位置决定</strong>的，它的内部实现其实是一个链表式的调用。如果不能保证每次的渲染的位置一致就不能保证它能正常的工作。</p>
-</blockquote>
-<h2 id="自定义-Hook"><a href="#自定义-Hook" class="headerlink" title="自定义 Hook"></a>自定义 Hook</h2><p>自定义 Hook 是一个函数，其名称以 “<code>use</code>” 开头，函数内部可以调用其他的 Hook；</p>
-<p>用于封装需要调用 Hooks 的逻辑，可在多个组件中共享使用；</p>
-</article><div id="paginator"></div></main><footer><div class="icon-wrapper in-left"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg></span></button></div><div class="icon-wrapper in-right"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg></span></button></div><p class="copyright-text"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">CC BY-NC-SA 4.0</a><span>·</span><a href="https://github.com/ttttonyhe/ouorz-mono" target="_blank" rel="noreferrer">Open Source Software (OSS)</a></p></footer><script src="/js/ouo.js"></script></div></body></html>
+        <%- partial('_partial/shares') %>
+      </div>
+    </div>
+  </body>
+</html>

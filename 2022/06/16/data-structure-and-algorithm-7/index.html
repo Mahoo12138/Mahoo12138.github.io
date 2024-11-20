@@ -1,110 +1,26 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>数据结构与算法学习之搜索二叉树 [ Mahoo12138 ]</title><link rel="stylesheet" href="/css/index.css"><meta name="post"><link rel="stylesheet" href="/css/layouts/post.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="hexo-container"><header></header><main id="content"><article id="post"><h1>数据结构与算法学习之搜索二叉树</h1><h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><p>如何在 n 个动态的整数中搜索某个整数？（检测其是否存在）</p>
-<p>Ⅰ. 考虑使用动态数组存放元素，从第 0 个位置开始遍历搜索，<strong>平均时间复杂度：O(n)</strong></p>
-<table>
-<thead>
-<tr>
-<th>0</th>
-<th>1</th>
-<th>2</th>
-<th>3</th>
-<th>4</th>
-<th>5</th>
-<th>6</th>
-<th>7</th>
-<th>8</th>
-<th>9</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>33</td>
-<td>66</td>
-<td>18</td>
-<td>28</td>
-<td>16</td>
-<td>52</td>
-<td>95</td>
-<td>45</td>
-<td>86</td>
-<td>71</td>
-</tr>
-</tbody></table>
-<p>Ⅱ. 如果是一个有序的动态数组，使用<strong>二分搜索</strong>，最坏的时间复杂度：**O(logn)<strong>；添加和删除的平均时间复杂度是</strong>O(n)**；</p>
-<blockquote>
-<p>数据规模不断减半，时间复杂度一般为 O(logn)；</p>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th>0</th>
-<th>1</th>
-<th>2</th>
-<th>3</th>
-<th>4</th>
-<th>5</th>
-<th>6</th>
-<th>7</th>
-<th>8</th>
-<th>9</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>15</td>
-<td>17</td>
-<td>20</td>
-<td>28</td>
-<td>31</td>
-<td>46</td>
-<td>57</td>
-<td>68</td>
-<td>85</td>
-<td>94</td>
-</tr>
-</tbody></table>
-<p>针对这个需求是否有更好的办法？</p>
-<p><strong>使用二叉搜索树</strong>，添加、删除、搜索额最坏时间复杂度均可优化至：O(logn)；</p>
-<h2 id="二叉搜索树"><a href="#二叉搜索树" class="headerlink" title="二叉搜索树"></a>二叉搜索树</h2><p>二叉搜索树是二叉树的一种,是应用非常广泛的一种二叉树，英文简称为BST，又被称为二叉查找树、二叉排序；</p>
-<ul>
-<li>树任意一个节点的值都大于其左子树所有节点的值；</li>
-<li>任意一个节点的值都小于其右子树所有节点的值；</li>
-<li>它的左右子树也是一棵二叉搜索树；</li>
-<li>二叉搜索树存储的元素必须具有可比较性；</li>
-</ul>
-<h3 id="接口设计"><a href="#接口设计" class="headerlink" title="接口设计"></a>接口设计</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">size</span><span class="params">()</span>						<span class="comment">// 元素的数量</span></span><br><span class="line"><span class="type">boolean</span> <span class="title function_">isEmpty</span><span class="params">()</span>				<span class="comment">// 是否为空</span></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">clean</span><span class="params">()</span> 					<span class="comment">// 清空所有元素</span></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">add</span><span class="params">(E element)</span> 			<span class="comment">// 添加元素</span></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">remove</span> <span class="params">(E element)</span> 		<span class="comment">// 删除元素</span></span><br><span class="line"><span class="type">boolean</span> <span class="title function_">contains</span> <span class="params">(E element)</span>	<span class="comment">// 是否包含某元素</span></span><br></pre></td></tr></table></figure>
+<!DOCTYPE html>
+<html lang="<%= config.language %>" color-mode="light">
 
-<p>通过接口可以看出，对于目前这个二叉树来说，元素是<strong>没有索引的概念</strong>的；</p>
-<h2 id="代码逻辑"><a href="#代码逻辑" class="headerlink" title="代码逻辑"></a>代码逻辑</h2><p>首先，新建的二叉搜索树 <code>BinarySearchTree</code> 类，在其中需要有几个基础的属性：</p>
-<ul>
-<li><code>size</code>：保存节点的变量；</li>
-<li><code>root</code>：根节点的变量，二叉搜索树的操作都需要从根节点开始；</li>
-<li><code>elementNotNullCheck</code>：检查节点元素是否为空的方法；</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="type">int</span> size;</span><br><span class="line"><span class="keyword">private</span> Node&lt;E&gt; root;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">elementNotNullCheck</span><span class="params">(E e)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span>(e == <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;element must not be null&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+  <%- partial('_partial/header') %>
 
-<h3 id="节点设计"><a href="#节点设计" class="headerlink" title="节点设计"></a>节点设计</h3><p>在 <code>BinarySearchTree</code> 类中，需要创建一个内部类进行节点的维护，内部包括左右节点和父节点，以及存储的元素，在构造时只需传入元素值和父节点即可：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">Node</span>&lt;E&gt;&#123;</span><br><span class="line">    E element;</span><br><span class="line">    Node&lt;E&gt; left;</span><br><span class="line">    Node&lt;E&gt; right;</span><br><span class="line">    Node&lt;E&gt; parent;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Node</span><span class="params">(E e, Node&lt;E&gt; n)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.element = e;</span><br><span class="line">        <span class="built_in">this</span>.parent = n;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+  <body>
+    <div id="app">
+      <%- partial('_partial/navigation') %>
 
-<h2 id="比较逻辑"><a href="#比较逻辑" class="headerlink" title="比较逻辑"></a>比较逻辑</h2><h3 id="Comparable-接口"><a href="#Comparable-接口" class="headerlink" title="Comparable 接口"></a>Comparable 接口</h3><p>所有传入二叉搜索树的元素都必须实现 Comparable 接口：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Comparable</span>&lt;E&gt; &#123;</span><br><span class="line">    <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(E e)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BinarySearchTree</span>&lt;E <span class="keyword">extends</span> <span class="title class_">Comparable</span>&gt; &#123;</span><br><span class="line">    <span class="type">int</span> <span class="title function_">compare</span><span class="params">(E e1, E e2)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> e1.compareTo(e2);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      <div class="flex-container">
+        <%- body %>
+        <%- partial('_partial/footer') %>
+      </div>
 
-<p>但是传入的对象实现了 Comparable  接口后，其比较逻辑其实是被限制无法改变了，如需要针对同一个对象根据其他属性进行比较是无法实现的；</p>
-<h3 id="Comparator-接口"><a href="#Comparator-接口" class="headerlink" title="Comparator 接口"></a>Comparator 接口</h3><p>要求在构造二叉搜索树时，必须传入一个 Comparator  比较器，</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Comparator</span>&lt;E&gt; &#123;</span><br><span class="line">    <span class="type">int</span> <span class="title function_">compare</span><span class="params">(E e1, E e2)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BinarySearchTree</span>&lt;E&gt; &#123;</span><br><span class="line">    <span class="keyword">private</span> Comparator&lt;E&gt; comparator;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">BinarySearchTree3</span><span class="params">(Comparator&lt;E&gt; comparator)</span>&#123;</span><br><span class="line">        <span class="built_in">this</span>.comparator = comparator;</span><br><span class="line">    &#125;</span><br><span class="line">   <span class="type">int</span> <span class="title function_">compare</span><span class="params">(E e1,E e2)</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> comparator.compare(e1, e2);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      <div class="tools-bar">
+        <%- partial('_partial/backtotop') %>
 
-<p>通过比较器虽然可以自定义比较逻辑，但是这样未免过于激进，不应该强制传入比较器，而应有其默认的比较逻辑；综上，<strong>结合二者的方法</strong>即是比较合理的实现：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BinarySearchTree</span>&lt;E&gt; &#123;</span><br><span class="line">    <span class="keyword">private</span> Comparator&lt;E&gt; comparator;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">BinarySearchTree</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="built_in">this</span>(<span class="literal">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">BinarySearchTree</span><span class="params">(Comparator&lt;E&gt; comparator)</span>&#123;</span><br><span class="line">        <span class="built_in">this</span>.comparator = comparator;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> <span class="title function_">compare</span><span class="params">(E e1, E e2)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(comparator != <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> comparator.compare(e1, e2);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ((Comparable&lt;E&gt;) e1).compareTo(e2);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        <%- partial('_partial/search') %>
 
-<p>需要注意的是，上述代码中没有要求传入的元素必须实现 Comparable 接口，因为 BinarySearchTree 类默认当作元素已经实现了该接口；</p>
-<h2 id="添加逻辑"><a href="#添加逻辑" class="headerlink" title="添加逻辑"></a>添加逻辑</h2><p>基本思路：</p>
-<ul>
-<li>先判断是否存在根节点，无则赋值为根节点；</li>
-<li>根据根节点，通过与插入元素比较，找到对应的父节点；</li>
-<li>创建新节点，通过 <code>parent.left = node</code> 或者 <code>parent.right = node</code></li>
-<li>相同的值，如何处理？<ul>
-<li>直接返回；</li>
-<li>覆盖原有的值（推荐）；</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> <span class="title function_">add</span><span class="params">(E element)</span> &#123;</span><br><span class="line">    elementNotNullCheck(element);	<span class="comment">// 检查 null</span></span><br><span class="line">    <span class="keyword">if</span>(root == <span class="literal">null</span>) &#123;	<span class="comment">// 判断是为空二叉树</span></span><br><span class="line">        root = <span class="keyword">new</span> <span class="title class_">Node</span>&lt;E&gt;(element, <span class="literal">null</span>); </span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Node&lt;E&gt; node = root;	<span class="comment">// 寻找临时节点</span></span><br><span class="line">    Node&lt;E&gt; parent = root;	<span class="comment">// 父节点</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">cmp</span> <span class="operator">=</span> <span class="number">0</span>;			<span class="comment">// 比较结果</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(node != <span class="literal">null</span>) &#123;	<span class="comment">// 判断条件：直到找到元素位置为 null 时</span></span><br><span class="line">        parent = node;		<span class="comment">// 保存父节点，在构造节点插入时需要</span></span><br><span class="line">        cmp = compare(element, node.element);</span><br><span class="line">        <span class="keyword">if</span>(cmp &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            node = node.right;</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(cmp &lt; <span class="number">0</span>) &#123;</span><br><span class="line">            node = node.left;</span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span>;		<span class="comment">// 相等</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    Node&lt;E&gt; newNode = <span class="keyword">new</span> <span class="title class_">Node</span>&lt;&gt;(element, parent);</span><br><span class="line">    <span class="keyword">if</span>(cmp &gt; <span class="number">0</span>) &#123;	<span class="comment">// 判断插入左支还是右支</span></span><br><span class="line">        parent.right = newNode;</span><br><span class="line">    &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">        parent.left = newNode;</span><br><span class="line">    &#125;</span><br><span class="line">    size++;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        <%- partial('_partial/colorscheme') %>
 
-</article><div id="paginator"></div></main><footer><div class="icon-wrapper in-left"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg></span></button></div><div class="icon-wrapper in-right"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg></span></button></div><p class="copyright-text"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">CC BY-NC-SA 4.0</a><span>·</span><a href="https://github.com/ttttonyhe/ouorz-mono" target="_blank" rel="noreferrer">Open Source Software (OSS)</a></p></footer><script src="/js/ouo.js"></script></div></body></html>
+        <%- partial('_partial/shares') %>
+      </div>
+    </div>
+  </body>
+</html>

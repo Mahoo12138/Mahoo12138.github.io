@@ -1,23 +1,26 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>React 18 中 StrictMode 下重复渲染组件 [ Mahoo12138 ]</title><link rel="stylesheet" href="/css/index.css"><meta name="post"><link rel="stylesheet" href="/css/layouts/post.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="hexo-container"><header></header><main id="content"><article id="post"><h1>React 18 中 StrictMode 下重复渲染组件</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>当升级到最新的 React 18 后，在分析测试代码时，常遇到组件渲染两次的情况。调试了很久，发现是<code>React.StrictMode</code>的问题；</p>
-<p>当然，之后我去谷歌搜索时，发现早已有人注意到了这个行为，不过他们在 <code>React</code> 官方仓库上发起 <a target="_blank" rel="noopener" href="https://github.com/facebook/react/issues/24467">issue</a>，把这当做一个 bug 上报，React 社区维护人员给出了相关文档说明。</p>
-<h2 id="什么是-React-StrictMode"><a href="#什么是-React-StrictMode" class="headerlink" title="什么是 React.StrictMode"></a>什么是 React.StrictMode</h2><p><code>React.StrictMode</code> 是在 2018 年的 16.3.0 版本中引入的组件。一开始，它只用在类组件中，而在 16.8.0 中，它对 hook 同样适用。以下是官方文档中的说明：</p>
-<blockquote>
-<p><code>StrictMode</code> 是一个用来突出显示应用程序中潜在问题的工具。与 <code>Fragment</code> 一样，<code>StrictMode</code> 不会渲染任何可见的 UI。它为其后代元素触发额外的检查和警告。</p>
-</blockquote>
-<p>总之，严格模式检查是为了开发者更好的编写 React 而出现的，且仅在开发模式下运行，更具体的使用场景可以查阅官方文档；</p>
-<h2 id="为什么会渲染两次呢"><a href="#为什么会渲染两次呢" class="headerlink" title="为什么会渲染两次呢"></a>为什么会渲染两次呢</h2><p>我们从使用 <code>React.StrictMode</code> 中获得的好处之一是，它帮助我们检测到渲染期生命周期的预期之外的副作用。</p>
-<p><code>React.StrictMode</code> 不能马上检测到副作用，但是它可以通过故意调用一些关键函数两次，来帮助我们发现副作用。</p>
-<p>这些函数有:</p>
-<ul>
-<li>类组件 <code>constructor</code>、<code>render</code> 以及 <code>shouldComponentUpdate</code> 方法</li>
-<li>类组件静态 <code>getDerivedStateFromProps</code> 方法</li>
-<li>方法组件的方法体</li>
-<li>状态更新函数 (<code>setState</code> 的第一个参数)</li>
-<li>传给 <code>useState</code>、<code>useMemo</code>、或 <code>useReducer</code> 的函数</li>
-</ul>
-<p>此外在<a target="_blank" rel="noopener" href="https://zh-hans.reactjs.org/docs/strict-mode.html#ensuring-reusable-state">官方文档 - 确保可复用的 state</a> 中也提到了一个问题：</p>
-<blockquote>
-<p>在未来，我们希望增加一个功能，允许 React 在保留 state 的同时对 UI 进行增删。例如，当用户从当前屏幕的标签离开并返回时，React 应该能立即展示之前屏幕的内容。为了做到这一点，React 支持使用卸载前已有的组件状态重新挂载到树上。</p>
-</blockquote>
-<p>为了帮助解决这些问题，React 18 为严格模式引入了一个全新的仅用于开发环境的检查操作。每当第一次安装组件时，<strong>这个新的检查将自动卸载并重新安装每个组件，并在第二次挂载时恢复之前的 state</strong>。</p>
-</article><div id="paginator"></div></main><footer><div class="icon-wrapper in-left"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg></span></button></div><div class="icon-wrapper in-right"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg></span></button></div><p class="copyright-text"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">CC BY-NC-SA 4.0</a><span>·</span><a href="https://github.com/ttttonyhe/ouorz-mono" target="_blank" rel="noreferrer">Open Source Software (OSS)</a></p></footer><script src="/js/ouo.js"></script></div></body></html>
+<!DOCTYPE html>
+<html lang="<%= config.language %>" color-mode="light">
+
+  <%- partial('_partial/header') %>
+
+  <body>
+    <div id="app">
+      <%- partial('_partial/navigation') %>
+
+      <div class="flex-container">
+        <%- body %>
+        <%- partial('_partial/footer') %>
+      </div>
+
+      <div class="tools-bar">
+        <%- partial('_partial/backtotop') %>
+
+        <%- partial('_partial/search') %>
+
+        <%- partial('_partial/colorscheme') %>
+
+        <%- partial('_partial/shares') %>
+      </div>
+    </div>
+  </body>
+</html>

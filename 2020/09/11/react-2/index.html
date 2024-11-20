@@ -1,52 +1,26 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>前端学习之React中的JSX [ Mahoo12138 ]</title><link rel="stylesheet" href="/css/index.css"><meta name="post"><link rel="stylesheet" href="/css/layouts/post.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="hexo-container"><header></header><main id="content"><article id="post"><h1>前端学习之React中的JSX</h1><h2 id="JSX的基本使用"><a href="#JSX的基本使用" class="headerlink" title="JSX的基本使用"></a>JSX的基本使用</h2><blockquote>
-<p>为什么不使用<code>React.createElement()</code>？</p>
-<ul>
-<li>繁琐不够简洁</li>
-<li>结构不够直观，无法一眼看出</li>
-<li>不够优雅，用户体验差</li>
-</ul>
-</blockquote>
-<p> <strong>JSX</strong> 是 <strong>JavaScript XML</strong> 的简写，表示在 JavaScript 代码中写 XML（HTML）格式的代码；</p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> title = <span class="language-xml"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>Hello JSX<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span><br><span class="line"><span class="title class_">ReactDOM</span>.<span class="title function_">render</span>(</span><br><span class="line">  title,</span><br><span class="line">  <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;root&#x27;</span>)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<!DOCTYPE html>
+<html lang="<%= config.language %>" color-mode="light">
 
-<p><strong>为什么脚手架中可以使用JSX语法？</strong></p>
-<ul>
-<li>JSX 并不是标准的 ECMAScript 语法，是其的扩展；</li>
-<li>需要 Babel 编译处理后，才能在浏览器环境中使用；</li>
-<li>create-react-app 脚手架中默认有编译的配置，无需手动设置；</li>
-<li>编译JSX语法的包为：<a href="">@babel&#x2F;preset-react</a></li>
-</ul>
-<p>使用 JSX 语法的几个注意点：</p>
-<ul>
-<li>JSX中React元素使用驼峰命名法，还有一些特殊属性：class &#x3D;&gt; className，for  &#x3D;&gt; htmlFor，tabindex &#x3D;&gt; tabIndex；</li>
-<li>没有子节点的React元素可用<code>/&gt;</code>结束；</li>
-<li>推荐使用小括号包裹 JSX，避免 JS 中的自动插入分号陷阱；</li>
-<li>使用 JSX 返回的组件必须为单个 html 元素，也可以使用 <code>Fragment</code>作为占位符包裹；</li>
-</ul>
-<h2 id="JSX中使用JS表达式"><a href="#JSX中使用JS表达式" class="headerlink" title="JSX中使用JS表达式"></a>JSX中使用JS表达式</h2><p>使用<code>&#123;&#125;</code>在JSX中嵌入Javascript表达式：</p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> name = <span class="string">&quot;Mahoo&quot;</span></span><br><span class="line"><span class="keyword">const</span> title = <span class="language-xml"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>Hello &#123;name&#125;<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+  <%- partial('_partial/header') %>
 
-<p>在<code>&#123;&#125;</code>可以使用任何合法的JavaScript表达式；</p>
-<p>比较特殊的像函数表达式，以及JSX自身也是表达式；不过，对象却是一个例外，一般在JSX中作为元素样式属性；</p>
-<p>JSX 中不能出现语句如<code>if</code>，<code>for</code>等条件，循环语句，会编译错误；</p>
-<h2 id="JSX的条件渲染"><a href="#JSX的条件渲染" class="headerlink" title="JSX的条件渲染"></a>JSX的条件渲染</h2><p>条件渲染：根据条件渲染特定的JSX结构</p>
-<p>适用场景：Loading 的加载</p>
-<p>可通过<code>if/else</code>语句，三元运算符和逻辑与运算符实现条件渲染：</p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> isLoading = <span class="literal">false</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">loadData</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">if</span> (isLoading) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>Loading<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">  &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (isLoading)?(<span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>Loading...<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span>)</span><br><span class="line">    									:(!isLoading &amp;&amp; (<span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>Loading Over<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span>))</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+  <body>
+    <div id="app">
+      <%- partial('_partial/navigation') %>
 
-<h2 id="JSX的列表渲染"><a href="#JSX的列表渲染" class="headerlink" title="JSX的列表渲染"></a>JSX的列表渲染</h2><p>如果需要渲染一组数据，可使用数组的<code>map()</code>方法；</p>
-<p>原则：<code>map()</code>遍历谁，就给谁添加 key 属性；</p>
-<p>注意渲染列表时，应该添加 key 属性，并且保证属性的值要唯一，尽量避免使用所应好作为 key ；</p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> songs = [</span><br><span class="line">  &#123;<span class="attr">id</span>:<span class="number">1</span>,<span class="attr">name</span>:<span class="string">&#x27;彩虹&#x27;</span>&#125;,</span><br><span class="line">  &#123;<span class="attr">id</span>:<span class="number">2</span>,<span class="attr">name</span>:<span class="string">&#x27;七里香&#x27;</span>&#125;,</span><br><span class="line">  &#123;<span class="attr">id</span>:<span class="number">3</span>,<span class="attr">name</span>:<span class="string">&#x27;黑色幽默&#x27;</span>&#125;,</span><br><span class="line">]</span><br><span class="line"><span class="keyword">const</span> list = (</span><br><span class="line">  <span class="language-xml"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    &#123;songs.map(item =&gt; (<span class="tag">&lt;<span class="name">li</span> <span class="attr">key</span>=<span class="string">&#123;item.id&#125;</span>&gt;</span>&#123;item.name&#125;<span class="tag">&lt;/<span class="name">li</span>&gt;</span>))&#125;</span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+      <div class="flex-container">
+        <%- body %>
+        <%- partial('_partial/footer') %>
+      </div>
 
-<h2 id="JSX的样式处理"><a href="#JSX的样式处理" class="headerlink" title="JSX的样式处理"></a>JSX的样式处理</h2><ol>
-<li><p>行内样式 —— style</p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;h1 style=&#123;&#123;<span class="attr">color</span>: <span class="string">&#x27;red&#x27;</span>,<span class="attr">backgroudColor</span>: <span class="string">&#x27;blue&#x27;</span>&#125;&#125;&gt;<span class="title class_">Hello</span>&lt;/h1&gt;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>类名 —— className</p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&#x27;./index.css&#x27;</span>;</span><br><span class="line"><span class="keyword">const</span> title = (</span><br><span class="line">  <span class="language-xml"><span class="tag">&lt;<span class="name">h1</span> <span class="attr">className</span>=<span class="string">&quot;title&quot;</span>&gt;</span>Hello<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span><br><span class="line">)</span><br></pre></td></tr></table></figure></li>
-</ol>
-<blockquote>
-<p>React 完全利用 Js 语言自身的能力来编写 UI，而不是造轮子增强 HTML 功能；</p>
-</blockquote>
-</article><div id="paginator"></div></main><footer><div class="icon-wrapper in-left"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg></span></button></div><div class="icon-wrapper in-right"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg></span></button></div><p class="copyright-text"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">CC BY-NC-SA 4.0</a><span>·</span><a href="https://github.com/ttttonyhe/ouorz-mono" target="_blank" rel="noreferrer">Open Source Software (OSS)</a></p></footer><script src="/js/ouo.js"></script></div></body></html>
+      <div class="tools-bar">
+        <%- partial('_partial/backtotop') %>
+
+        <%- partial('_partial/search') %>
+
+        <%- partial('_partial/colorscheme') %>
+
+        <%- partial('_partial/shares') %>
+      </div>
+    </div>
+  </body>
+</html>

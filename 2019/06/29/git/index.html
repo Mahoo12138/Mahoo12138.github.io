@@ -1,41 +1,26 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Git 版本控制使用填坑指北 [ Mahoo12138 ]</title><link rel="stylesheet" href="/css/index.css"><meta name="post"><link rel="stylesheet" href="/css/layouts/post.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="hexo-container"><header></header><main id="content"><article id="post"><h1>Git 版本控制使用填坑指北</h1><h3 id="git-pull-失败-提示：fatal-refusing-to-merge-unrelated-histories"><a href="#git-pull-失败-提示：fatal-refusing-to-merge-unrelated-histories" class="headerlink" title="git pull 失败 ,提示：fatal: refusing to merge unrelated histories"></a>git pull 失败 ,提示：<code>fatal: refusing to merge unrelated histories</code></h3><p><strong>原因：</strong>无关的仓库无法合并</p>
-<p><strong>方法：</strong></p>
-<ul>
-<li><p>使用强制命令：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git pull origin master --allow-unrelated-histories</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>先将远程仓库拉取到本地仓库，再推送</p>
-</li>
-</ul>
-<h3 id="git-push-失败，提示：Updates-were-rejected-because-the-tip-of-your-current-branch-is-behind"><a href="#git-push-失败，提示：Updates-were-rejected-because-the-tip-of-your-current-branch-is-behind" class="headerlink" title="git push 失败，提示：Updates were rejected because the tip of your current branch is behind"></a>git push 失败，提示：<code>Updates were rejected because the tip of your current branch is behind</code></h3><p><strong>原因：</strong>本地仓库版本低于远程仓库版本，或做了一些自定义修改</p>
-<p><strong>方法：</strong>强制推送</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push -u origin master -f</span><br></pre></td></tr></table></figure>
+<!DOCTYPE html>
+<html lang="<%= config.language %>" color-mode="light">
 
-<h3 id="Win10下-git-bash-中文显示乱码：类似﷨﷨﷨﷨或▒▒▒▒"><a href="#Win10下-git-bash-中文显示乱码：类似﷨﷨﷨﷨或▒▒▒▒" class="headerlink" title="Win10下 git bash 中文显示乱码：类似﷨﷨﷨﷨或▒▒▒▒"></a>Win10下 git bash 中文显示乱码：类似﷨﷨﷨﷨或▒▒▒▒</h3><p><strong>解决方法</strong>：</p>
-<ul>
-<li>在窗口内右击，选择<code>Options...</code></li>
-<li>在<code>Text</code>内，选择Locale为<em>zh_CN</em>，Character set 为<em>GBK</em></li>
-<li>Save</li>
-</ul>
-<h3 id="git-push-失败，提示：git-github-com-Permission-denied-publickey-fatal-Could-not-read-from-remote-repository"><a href="#git-push-失败，提示：git-github-com-Permission-denied-publickey-fatal-Could-not-read-from-remote-repository" class="headerlink" title="git push 失败，提示：git@github.com: Permission denied (publickey). fatal: Could not read from remote repository."></a>git push 失败，提示：<code>git@github.com: Permission denied (publickey). fatal: Could not read from remote repository.</code></h3><p><strong>原因</strong>：电脑公钥（publickey）未绑定到 Github，所以无法识别。 </p>
-<p>解决方法：</p>
-<ul>
-<li><p>获取本地电脑公钥：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -C “你的邮箱”</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>在 <em>Github → Settings → SHH and GPG keys</em>中，添加刚刚生成的 <code>SHH keys</code>即可</p>
-</li>
-</ul>
-<h3 id="git-push-失败，提示：fatal-unable-to-access-仓库地址"><a href="#git-push-失败，提示：fatal-unable-to-access-仓库地址" class="headerlink" title="git push 失败，提示：fatal: unable to access $(仓库地址) "></a>git push 失败，提示：<code>fatal: unable to access $(仓库地址) </code></h3><p><strong>原因</strong>：远程仓库已改名，本地绑定未修改。</p>
-<p>解决方法：</p>
-<ul>
-<li><p>看所有远程仓库：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git remote</span><br><span class="line"><span class="comment"># git remote xxx 查看指定远程仓库地址</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>删除原绑定仓库：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote <span class="built_in">rm</span> $(origin)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>添加仓库：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote add origin $(仓库地址)</span><br></pre></td></tr></table></figure></li>
-</ul>
-</article><div id="paginator"></div></main><footer><div class="icon-wrapper in-left"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg></span></button></div><div class="icon-wrapper in-right"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg></span></button></div><p class="copyright-text"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">CC BY-NC-SA 4.0</a><span>·</span><a href="https://github.com/ttttonyhe/ouorz-mono" target="_blank" rel="noreferrer">Open Source Software (OSS)</a></p></footer><script src="/js/ouo.js"></script></div></body></html>
+  <%- partial('_partial/header') %>
+
+  <body>
+    <div id="app">
+      <%- partial('_partial/navigation') %>
+
+      <div class="flex-container">
+        <%- body %>
+        <%- partial('_partial/footer') %>
+      </div>
+
+      <div class="tools-bar">
+        <%- partial('_partial/backtotop') %>
+
+        <%- partial('_partial/search') %>
+
+        <%- partial('_partial/colorscheme') %>
+
+        <%- partial('_partial/shares') %>
+      </div>
+    </div>
+  </body>
+</html>

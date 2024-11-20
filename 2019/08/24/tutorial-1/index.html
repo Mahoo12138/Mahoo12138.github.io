@@ -1,20 +1,26 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>利用 spacedesk 连接多个副屏 [ Mahoo12138 ]</title><link rel="stylesheet" href="/css/index.css"><meta name="post"><link rel="stylesheet" href="/css/layouts/post.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="hexo-container"><header></header><main id="content"><article id="post"><h1>利用 spacedesk 连接多个副屏</h1><p>因为最近一直在学习安卓，在开发过程中，需要查看开源项目的文档，笔记本的15.6的显示屏就完全不够用了，想着自己还有一块连接台式主机的显示器，就差一根VGA数据线了。</p>
-<h2 id="连接显示器"><a href="#连接显示器" class="headerlink" title="连接显示器"></a>连接显示器</h2><ul>
-<li>闲置显示屏</li>
-<li>VGA或HDMI等连接线</li>
-</ul>
-<p>连接好后，在<strong>设置-&gt;系统-&gt;显示</strong>中，设置为<code>将桌面扩展到此显示器</code>：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/mahoo12138/js-css-cdn/hexo-images/tutorials/pc/fp.png"></p>
-<p>并且可以调节显示器的位置：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/mahoo12138/js-css-cdn/hexo-images/tutorials/pc/fp2.png"></p>
-<h2 id="连接安卓手机"><a href="#连接安卓手机" class="headerlink" title="连接安卓手机"></a>连接安卓手机</h2><p>首先主机和客户端需要在同一局域网内，其他的交给软件实现就行了，<strong>spacedesk</strong>官方下载：<a target="_blank" rel="noopener" href="http://www.spacedesk.net/">http://www.spacedesk.net/</a></p>
-<p>网盘下载：</p>
-<ul>
-<li>主机：<a target="_blank" rel="noopener" href="https://pan.baidu.com/s/17DU1eGAXyKC7m2RJrsFlGw">https://pan.baidu.com/s/17DU1eGAXyKC7m2RJrsFlGw</a></li>
-<li>客户端：<a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1XJxupSaaymkjzbdDPAwREw">https://pan.baidu.com/s/1XJxupSaaymkjzbdDPAwREw</a></li>
-</ul>
-<p>笔记本上开启主机端后，手机客户端，打开后点击已有的主机端即可：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/mahoo12138/js-css-cdn/hexo-images/tutorials/pc/fp3.jpg" alt="img"></p>
-<p>最后放一张效果图：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/mahoo12138/js-css-cdn/hexo-images/tutorials/pc/fp4.jpg"></p>
-</article><div id="paginator"></div></main><footer><div class="icon-wrapper in-left"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg></span></button></div><div class="icon-wrapper in-right"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg></span></button></div><p class="copyright-text"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">CC BY-NC-SA 4.0</a><span>·</span><a href="https://github.com/ttttonyhe/ouorz-mono" target="_blank" rel="noreferrer">Open Source Software (OSS)</a></p></footer><script src="/js/ouo.js"></script></div></body></html>
+<!DOCTYPE html>
+<html lang="<%= config.language %>" color-mode="light">
+
+  <%- partial('_partial/header') %>
+
+  <body>
+    <div id="app">
+      <%- partial('_partial/navigation') %>
+
+      <div class="flex-container">
+        <%- body %>
+        <%- partial('_partial/footer') %>
+      </div>
+
+      <div class="tools-bar">
+        <%- partial('_partial/backtotop') %>
+
+        <%- partial('_partial/search') %>
+
+        <%- partial('_partial/colorscheme') %>
+
+        <%- partial('_partial/shares') %>
+      </div>
+    </div>
+  </body>
+</html>

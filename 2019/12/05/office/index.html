@@ -1,19 +1,26 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>关于office的一点点使用经验 [ Mahoo12138 ]</title><link rel="stylesheet" href="/css/index.css"><meta name="post"><link rel="stylesheet" href="/css/layouts/post.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="hexo-container"><header></header><main id="content"><article id="post"><h1>关于office的一点点使用经验</h1><p>最近在期末复习，会经常性做一些电子笔记。难免会用到微软的office全家桶，对于一个没有系统性学过这些软件的我来说，遇到很多问题全靠百度过活，百度最有用的功能就是百度经验了，其次就是百度文库，PPT白嫖就是爽！</p>
-<p>然后嘛，我特开此贴记录一下我遇到的问题，很弱智:smile:</p>
-<h2 id="记录一次随机生成体温"><a href="#记录一次随机生成体温" class="headerlink" title="记录一次随机生成体温"></a>记录一次随机生成体温</h2><ul>
-<li><p>编辑日期<code>YYYY-MM-DD</code>，右下角鼠标拖动下拉</p>
-</li>
-<li><p>在单元格中，设置函数<code>=36.4+RAND()*0.4</code>，数值大小依据情况取值</p>
-<blockquote>
-<p>RAND() ：返回大于或等于0且小于1的平均分布的随机数</p>
-</blockquote>
-</li>
-<li><p>重新整理数据，因为每次操作后数据都会重新生成，所以需要数据持久化</p>
-<ul>
-<li>选中所有数据复制</li>
-<li>在其他空白区域粘贴，粘贴选项选择：<strong>值</strong>，来回即可</li>
-<li>选中所有数据，单击工具栏<strong>数字格式</strong>，选择<strong>数值</strong>，保留一位小数</li>
-</ul>
-</li>
-</ul>
-</article><div id="paginator"></div></main><footer><div class="icon-wrapper in-left"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg></span></button></div><div class="icon-wrapper in-right"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg></span></button></div><p class="copyright-text"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">CC BY-NC-SA 4.0</a><span>·</span><a href="https://github.com/ttttonyhe/ouorz-mono" target="_blank" rel="noreferrer">Open Source Software (OSS)</a></p></footer><script src="/js/ouo.js"></script></div></body></html>
+<!DOCTYPE html>
+<html lang="<%= config.language %>" color-mode="light">
+
+  <%- partial('_partial/header') %>
+
+  <body>
+    <div id="app">
+      <%- partial('_partial/navigation') %>
+
+      <div class="flex-container">
+        <%- body %>
+        <%- partial('_partial/footer') %>
+      </div>
+
+      <div class="tools-bar">
+        <%- partial('_partial/backtotop') %>
+
+        <%- partial('_partial/search') %>
+
+        <%- partial('_partial/colorscheme') %>
+
+        <%- partial('_partial/shares') %>
+      </div>
+    </div>
+  </body>
+</html>

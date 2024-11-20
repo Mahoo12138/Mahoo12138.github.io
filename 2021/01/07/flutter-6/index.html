@@ -1,34 +1,26 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Flutter 入门学习之按钮 [ Mahoo12138 ]</title><link rel="stylesheet" href="/css/index.css"><meta name="post"><link rel="stylesheet" href="/css/layouts/post.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="hexo-container"><header></header><main id="content"><article id="post"><h1>Flutter 入门学习之按钮</h1><p>按钮的使用大致相同，无非样式和各种交互的回调，这里以 TextButton 为例：</p>
-<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">TextButton(</span><br><span class="line">  child: Text(<span class="string">&#x27;TextButton&#x27;</span>),</span><br><span class="line">  <span class="comment">// onPressed 为点击回调，onLongPress 为长按回调</span></span><br><span class="line">  onPressed: () &#123;&#125;,</span><br><span class="line">  onLongPress: ()&#123;&#125;,</span><br><span class="line">  style: ButtonStyle(</span><br><span class="line">    foregroundColor: MaterialStateProperty.all(Colors.cyan),</span><br><span class="line">    textStyle: MaterialStateProperty.all(TextStyle(fontSize: <span class="number">20</span>)),</span><br><span class="line">  ),</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<!DOCTYPE html>
+<html lang="<%= config.language %>" color-mode="light">
 
-<blockquote>
-<p><strong>注意</strong>：字体颜色的设置不通过<strong>textStyle</strong> 设置，而是通过 <strong>foregroundColor</strong></p>
-</blockquote>
-<p>样式的构造函数如下：</p>
-<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> ButtonStyle(&#123;</span><br><span class="line">  <span class="keyword">this</span>.textStyle, <span class="comment">//字体</span></span><br><span class="line">  <span class="keyword">this</span>.backgroundColor, <span class="comment">//背景色</span></span><br><span class="line">  <span class="keyword">this</span>.foregroundColor, <span class="comment">//前景色</span></span><br><span class="line">  <span class="keyword">this</span>.overlayColor, <span class="comment">// 高亮色，按钮处于focused, hovered, or pressed时的颜色</span></span><br><span class="line">  <span class="keyword">this</span>.shadowColor, <span class="comment">// 阴影颜色</span></span><br><span class="line">  <span class="keyword">this</span>.elevation, <span class="comment">// 阴影值</span></span><br><span class="line">  <span class="keyword">this</span>.padding, <span class="comment">// 内距</span></span><br><span class="line">  <span class="keyword">this</span>.minimumSize, <span class="comment">//最小尺寸</span></span><br><span class="line">  <span class="keyword">this</span>.side, <span class="comment">//边框</span></span><br><span class="line">  <span class="keyword">this</span>.shape, <span class="comment">//形状</span></span><br><span class="line">  <span class="keyword">this</span>.mouseCursor, <span class="comment">//鼠标指针的光标进入或悬停在此按钮的[InkWell]上时。</span></span><br><span class="line">  <span class="keyword">this</span>.visualDensity, <span class="comment">// 按钮布局的紧凑程度</span></span><br><span class="line">  <span class="keyword">this</span>.tapTargetSize, <span class="comment">// 响应触摸的区域</span></span><br><span class="line">  <span class="keyword">this</span>.animationDuration, <span class="comment">//[shape]和[elevation]的动画更改的持续时间。</span></span><br><span class="line">  <span class="keyword">this</span>.enableFeedback, <span class="comment">// 检测到的手势是否应提供声音和/或触觉反馈。例如，在Android上，点击会产生咔哒声，启用反馈后，长按会产生短暂的振动。通常，组件默认值为true。</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+  <%- partial('_partial/header') %>
 
-<p>shape 属性可用的值举例：</p>
-<ul>
-<li>BeveledRectangleBorder	尖端斜角</li>
-<li>CircleBorder    圆形</li>
-<li>RoundedRectangleBorder   圆角</li>
-<li>StadiumBorder   半圆角（腰圆）</li>
-</ul>
-<p>其他的按钮还有：</p>
-<ul>
-<li>RaisedButton（Material 风格凸起的按钮，1.22版本前，不建议使用，使用 ElevatedButton）</li>
-<li>FlatButton （ Material 风格扁平的按钮，1.22版本前，推荐使用 TextButton）</li>
-<li>OutlinedButton（带边框的按钮，1.22 前有 OutlineButton）</li>
-<li>IconButton（图标按钮）</li>
-<li>DropdownButton（Material Style 下拉菜单按钮）</li>
-<li>PopupMenuButton（菜单选择框按钮）</li>
-<li>FloatingActionButton（悬浮按钮）</li>
-</ul>
-<p>1.22 以后出现的新按钮，可以作统一全局的样式管理：</p>
-<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">MaterialApp(</span><br><span class="line">  title: <span class="string">&#x27;Flutter Demo&#x27;</span>,</span><br><span class="line">  theme: ThemeData(</span><br><span class="line">    textButtonTheme: TextButtonThemeData(</span><br><span class="line">      style: ButtonStyle()</span><br><span class="line">    ),</span><br><span class="line">    elevatedButtonTheme: ElevatedButtonThemeData(</span><br><span class="line">        style: ButtonStyle()</span><br><span class="line">    ),</span><br><span class="line">    outlinedButtonTheme: OutlinedButtonThemeData(</span><br><span class="line">        style: ButtonStyle()</span><br><span class="line">    )</span><br><span class="line">  ),</span><br><span class="line">  home: MyHomePage(title: <span class="string">&#x27;Flutter Demo Home Page&#x27;</span>),</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+  <body>
+    <div id="app">
+      <%- partial('_partial/navigation') %>
 
+      <div class="flex-container">
+        <%- body %>
+        <%- partial('_partial/footer') %>
+      </div>
 
+      <div class="tools-bar">
+        <%- partial('_partial/backtotop') %>
 
+        <%- partial('_partial/search') %>
 
+        <%- partial('_partial/colorscheme') %>
 
-</article><div id="paginator"></div></main><footer><div class="icon-wrapper in-left"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg></span></button></div><div class="icon-wrapper in-right"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg></span></button></div><p class="copyright-text"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">CC BY-NC-SA 4.0</a><span>·</span><a href="https://github.com/ttttonyhe/ouorz-mono" target="_blank" rel="noreferrer">Open Source Software (OSS)</a></p></footer><script src="/js/ouo.js"></script></div></body></html>
+        <%- partial('_partial/shares') %>
+      </div>
+    </div>
+  </body>
+</html>

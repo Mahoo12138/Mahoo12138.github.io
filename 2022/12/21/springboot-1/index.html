@@ -1,52 +1,26 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>SprintBoot实战笔记 [ Mahoo12138 ]</title><link rel="stylesheet" href="/css/index.css"><meta name="post"><link rel="stylesheet" href="/css/layouts/post.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="hexo-container"><header></header><main id="content"><article id="post"><h1>SprintBoot实战笔记</h1><h2 id="基础前置知识"><a href="#基础前置知识" class="headerlink" title="基础前置知识"></a>基础前置知识</h2><ul>
-<li><p><strong>spring-boot-starter-parent</strong>：Spring Boot 的版本仲裁中心，控制了所有依赖的版本号；</p>
-</li>
-<li><p><strong>spring-boot-starter</strong>：Spring Boot 的核心启动器，包含了自动配置、日志和YAML等；</p>
-</li>
-<li><p><strong>spring-boot-starter-web</strong>：spring-boot-starter 的超集，基于 web 的场景额外引入了 web 模块开发需要的相关 jar 包；</p>
-</li>
-<li><p><strong>spring-boot-starter-jdbc</strong>：基础的 Spring 抽象类，包括 <code>DataSource</code> 等；</p>
-</li>
-<li><p><strong>spring-boot-starter-data-jdbc</strong>：除了基础的数据库连接功能，还额外提供了 <code>CrudRepository</code>等；</p>
-</li>
-</ul>
-<h3 id="初始化项目"><a href="#初始化项目" class="headerlink" title="初始化项目"></a>初始化项目</h3><p><code>Edit Starters</code> 插件可对已有的项目重新生成 <code>pom.xml</code> 的依赖项：</p>
-<ul>
-<li>安装，<strong>generate</strong>，<strong>Edit Starter</strong>；</li>
-</ul>
-<h3 id="项目依赖"><a href="#项目依赖" class="headerlink" title="项目依赖"></a>项目依赖</h3><ul>
-<li><p><strong>Lombok</strong>：简化 Java 代码，使用注解省略 getter、setter、equals等方法；</p>
-</li>
-<li><p><strong>Hutool</strong>：一个小而全的 Java 工具类库；</p>
-</li>
-</ul>
-<h4 id="数据库连接"><a href="#数据库连接" class="headerlink" title="数据库连接"></a>数据库连接</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">```</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">```yaml</span><br><span class="line">datasource:</span><br><span class="line">    driver-class-name: org.postgresql.Driver</span><br><span class="line">    url: jdbc:postgresql://localhost:5432/hippus</span><br><span class="line">datasource:</span><br><span class="line">	# deprecated</span><br><span class="line">    driverClassName: com.mysql.jdbc.Driver</span><br><span class="line">    url: jdbc:mysql://127.0.0.1:3306/hippus</span><br></pre></td></tr></table></figure>
+<!DOCTYPE html>
+<html lang="<%= config.language %>" color-mode="light">
 
+  <%- partial('_partial/header') %>
 
+  <body>
+    <div id="app">
+      <%- partial('_partial/navigation') %>
 
-<h3 id="开发插件"><a href="#开发插件" class="headerlink" title="开发插件"></a>开发插件</h3><ul>
-<li><strong>MybatisX</strong>：</li>
-</ul>
-<h3 id="启动项目"><a href="#启动项目" class="headerlink" title="启动项目"></a>启动项目</h3><p><strong>Please sign in</strong>：集成 SpringSecurity 依赖后，其中包括<em>SecurityAutoConfiguration</em>类 - 包含<strong>初始&#x2F;默认安全配置</strong>：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-security<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+      <div class="flex-container">
+        <%- body %>
+        <%- partial('_partial/footer') %>
+      </div>
 
-<p>默认情况下，应用程序将启用基本身份验证。有一些预定义的属性，例如：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">security.user.name=user</span><br><span class="line">security.basic.enabled=true</span><br></pre></td></tr></table></figure>
+      <div class="tools-bar">
+        <%- partial('_partial/backtotop') %>
 
-<p>启动应用程序，我们会注意到默认密码是随机生成的并打印在控制台日志中；</p>
-<p>我们可以排除<em>SecurityAutoConfiguration</em>类，取消安全性自动配置并添加我们自己的配置：</p>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication(exclude = [SecurityAutoConfiguration::class])</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">HippusApplication</span></span><br></pre></td></tr></table></figure>
+        <%- partial('_partial/search') %>
 
-<p>或者通过在application.properties文件中添加一些配置：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration</span><br></pre></td></tr></table></figure>
+        <%- partial('_partial/colorscheme') %>
 
-<h3 id="代码开发"><a href="#代码开发" class="headerlink" title="代码开发"></a>代码开发</h3><h4 id="常见注解"><a href="#常见注解" class="headerlink" title="常见注解"></a>常见注解</h4><ul>
-<li><strong>ResponseBodyAdvice</strong>：拦截 Controller 方法的返回值，处理返回值，一般用来统一返回格式，加解密，签名等等；</li>
-</ul>
-<h4 id="自定义注解"><a href="#自定义注解" class="headerlink" title="自定义注解"></a>自定义注解</h4><ul>
-<li><strong>@Target</strong>：描述注解修饰的对象范围，枚举规定了范围；</li>
-<li><strong>@Retention</strong>：定义该注解被保留时间长短；</li>
-<li><strong>@Inherited</strong>：标识某个被标注的类型是被继承的；</li>
-<li><strong>@Documented</strong>：用于描述其它类型的 annotation 应该被作为被标注的程序成员的公共API；</li>
-</ul>
-</article><div id="paginator"></div></main><footer><div class="icon-wrapper in-left"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg></span></button></div><div class="icon-wrapper in-right"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg></span></button></div><p class="copyright-text"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">CC BY-NC-SA 4.0</a><span>·</span><a href="https://github.com/ttttonyhe/ouorz-mono" target="_blank" rel="noreferrer">Open Source Software (OSS)</a></p></footer><script src="/js/ouo.js"></script></div></body></html>
+        <%- partial('_partial/shares') %>
+      </div>
+    </div>
+  </body>
+</html>

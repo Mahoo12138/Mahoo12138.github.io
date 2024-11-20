@@ -1,27 +1,26 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>利用ADB将安卓投屏到电脑进行调试开发 [ Mahoo12138 ]</title><link rel="stylesheet" href="/css/index.css"><meta name="post"><link rel="stylesheet" href="/css/layouts/post.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="hexo-container"><header></header><main id="content"><article id="post"><h1>利用ADB将安卓投屏到电脑进行调试开发</h1><p>保证手机与电脑在同一个局域网下，然后查看手机的IP地址：</p>
-<h2 id="投屏准备"><a href="#投屏准备" class="headerlink" title="投屏准备"></a>投屏准备</h2><p>数据线连接手机，并确保手机与电脑在同一个局域网下，然后查看手机的IP地址</p>
-<ul>
-<li>通过设置-WLAN，查看当前WiF信息详细，查看IP地址</li>
-<li>通过adb命令查看：<code>adb shell netcfg</code></li>
-</ul>
-<p>在电脑cmd中，ping一下手机的IP地址，再次检查是否同一局域网</p>
-<p>开启adb调式端口 <code>adb tcpip 5555</code>，并通过IP连接安卓手机：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb connect &lt;android-ip&gt;</span><br></pre></td></tr></table></figure>
+<!DOCTYPE html>
+<html lang="<%= config.language %>" color-mode="light">
 
-<p>连接成功后显示<code>connected to 192.168.0.104:5555</code></p>
-<h2 id="软件投屏"><a href="#软件投屏" class="headerlink" title="软件投屏"></a>软件投屏</h2><p>在大佬博客上，下载其开发的投屏软件：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/we-hjb/p/10989928.html">安卓投屏助手(ARDC)最新版</a></p>
-<p>打开软件后，自动连接，开始投屏，还有各种玩法，自行摸索</p>
-<h2 id="使用问题"><a href="#使用问题" class="headerlink" title="使用问题"></a>使用问题</h2><ul>
-<li><p>cannot connect to 192.168.0.104:5555: 由于目标计算机积极拒绝，无法连接。 (10061)</p>
-<ol>
-<li><p>使用数据线连接手机</p>
-</li>
-<li><p>进入手机shell，如<code>Termux</code> 输入命令：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">打开adb网络调式，并设置端口</span></span><br><span class="line">setprop service.adb.tcp.port 5555</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>重新投屏即可</p>
-</li>
-</ol>
-</li>
-</ul>
-</article><div id="paginator"></div></main><footer><div class="icon-wrapper in-left"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg></span></button></div><div class="icon-wrapper in-right"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg></span></button></div><p class="copyright-text"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">CC BY-NC-SA 4.0</a><span>·</span><a href="https://github.com/ttttonyhe/ouorz-mono" target="_blank" rel="noreferrer">Open Source Software (OSS)</a></p></footer><script src="/js/ouo.js"></script></div></body></html>
+  <%- partial('_partial/header') %>
+
+  <body>
+    <div id="app">
+      <%- partial('_partial/navigation') %>
+
+      <div class="flex-container">
+        <%- body %>
+        <%- partial('_partial/footer') %>
+      </div>
+
+      <div class="tools-bar">
+        <%- partial('_partial/backtotop') %>
+
+        <%- partial('_partial/search') %>
+
+        <%- partial('_partial/colorscheme') %>
+
+        <%- partial('_partial/shares') %>
+      </div>
+    </div>
+  </body>
+</html>

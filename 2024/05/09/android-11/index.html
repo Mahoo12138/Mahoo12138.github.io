@@ -1,13 +1,26 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>安卓开发学习之 Gradle 摸爬打滚记录 [ Mahoo12138 ]</title><link rel="stylesheet" href="/css/index.css"><meta name="post"><link rel="stylesheet" href="/css/layouts/post.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="hexo-container"><header></header><main id="content"><article id="post"><h1>安卓开发学习之 Gradle 摸爬打滚记录</h1><h1 id="安卓开发学习之-Gradle-摸爬打滚记录"><a href="#安卓开发学习之-Gradle-摸爬打滚记录" class="headerlink" title="安卓开发学习之 Gradle 摸爬打滚记录"></a>安卓开发学习之 Gradle 摸爬打滚记录</h1><h2 id="Connection-refused-no-further-information"><a href="#Connection-refused-no-further-information" class="headerlink" title="Connection refused: no further information"></a>Connection refused: no further information</h2><p>在 Gradle task 执行过程中，出现这种问题，基本会打印出网络问题或使用的代理无法连接，如果是代理问题，如：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Got socket exception during request. It might be caused by SSL misconfiguration</span><br><span class="line">    &gt; Connect to 127.0.0.1:10809 [/127.0.0.1] failed: Connection refused: no further information</span><br></pre></td></tr></table></figure>
+<!DOCTYPE html>
+<html lang="<%= config.language %>" color-mode="light">
 
-<p>这个就很明显了，检查以下路径下的配置文件：</p>
-<ul>
-<li>当前工程 project 目录下的 <code>gradle.properties</code>；</li>
-<li>当前用户目录下的 <code>.gradle\gradle.properties</code></li>
-</ul>
-<p>是否存在类似的配置：</p>
-<figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">systemProp.http.proxyHost</span>=<span class="number">127.0</span>.<span class="number">0.1</span></span><br><span class="line"><span class="attr">systemProp.https.proxyHost</span>=<span class="number">127.0</span>.<span class="number">0.1</span></span><br><span class="line"><span class="attr">systemProp.https.proxyPort</span>=<span class="number">7890</span></span><br><span class="line"><span class="attr">systemProp.http.proxyPort</span>=<span class="number">7890</span></span><br></pre></td></tr></table></figure>
+  <%- partial('_partial/header') %>
 
-<p>按当前系统具体情况进行修改即可。</p>
-</article><div id="paginator"></div></main><footer><div class="icon-wrapper in-left"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg></span></button></div><div class="icon-wrapper in-right"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg></span></button></div><p class="copyright-text"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">CC BY-NC-SA 4.0</a><span>·</span><a href="https://github.com/ttttonyhe/ouorz-mono" target="_blank" rel="noreferrer">Open Source Software (OSS)</a></p></footer><script src="/js/ouo.js"></script></div></body></html>
+  <body>
+    <div id="app">
+      <%- partial('_partial/navigation') %>
+
+      <div class="flex-container">
+        <%- body %>
+        <%- partial('_partial/footer') %>
+      </div>
+
+      <div class="tools-bar">
+        <%- partial('_partial/backtotop') %>
+
+        <%- partial('_partial/search') %>
+
+        <%- partial('_partial/colorscheme') %>
+
+        <%- partial('_partial/shares') %>
+      </div>
+    </div>
+  </body>
+</html>

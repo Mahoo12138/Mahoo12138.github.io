@@ -1,85 +1,26 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>超乎你想象的Stm32中的TIM定时器（基础篇） [ Mahoo12138 ]</title><link rel="stylesheet" href="/css/index.css"><meta name="post"><link rel="stylesheet" href="/css/layouts/post.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="hexo-container"><header></header><main id="content"><article id="post"><h1>超乎你想象的Stm32中的TIM定时器（基础篇）</h1><p>注：本文属博主学习时所作笔记，内容源大参考于野火的《零死角玩转STM32F103》以及部分网络资料，笔记内容仅作为自己参考，免去频繁查询参考手册的麻烦，如有错误，还请指出！</p>
-<h2 id="定时器分类"><a href="#定时器分类" class="headerlink" title="定时器分类"></a>定时器分类</h2><p>STM32F1 系列中，除了互联型的产品，共有 8 个定时器，分为基本定时器，通用定时器和高级定时器。  </p>
-<table>
-<thead>
-<tr>
-<th>类别</th>
-<th>定时器</th>
-<th>分辨率</th>
-<th>计数器类型</th>
-<th>预分频系数</th>
-<th>产生DMA</th>
-<th>捕获&#x2F;比较通道</th>
-<th>互补输出</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>高级定时器</td>
-<td>TIM1，TIM8</td>
-<td>16位</td>
-<td>向上&#x2F;向下</td>
-<td>1~65535</td>
-<td>可以</td>
-<td>4</td>
-<td>有</td>
-</tr>
-<tr>
-<td>通用定时器</td>
-<td>TIM2~TIM5</td>
-<td>16位</td>
-<td>向上&#x2F;向下</td>
-<td>1~65535</td>
-<td>可以</td>
-<td>4</td>
-<td>无</td>
-</tr>
-<tr>
-<td>基本定时器</td>
-<td>TIM6，TIM7</td>
-<td>16位</td>
-<td>向上</td>
-<td>1~65535</td>
-<td>可以</td>
-<td>0</td>
-<td>无</td>
-</tr>
-</tbody></table>
-<h2 id="基本定时器"><a href="#基本定时器" class="headerlink" title="基本定时器"></a>基本定时器</h2><img src="https://cdn.jsdelivr.net/gh/mahoo12138/js-css-cdn/hexo-images/study/STM32/tim1.png" style="zoom: 67%;" />
+<!DOCTYPE html>
+<html lang="<%= config.language %>" color-mode="light">
 
-<ol>
-<li><p><strong>时钟源</strong>	TIMxCLK由APB1预分频提供，库函数中 APB1 预分频系数为 2 ，定时器时钟TIMxCLK &#x3D; 36 * 2 &#x3D;72</p>
-</li>
-<li><p><strong>计数器时钟</strong>	CK_CNT 经 PSC 得到，PSC是16位预分频器，可对 TIMxCLK 进行1~65536 之间任意一个数进行分频：CK_INT&#x3D;TIMxCLK&#x2F;(PSC + 1)</p>
-</li>
-<li><p><strong>计数器</strong>	CNT 是一个16位的计数器，只能向上计数，最大值位65535，计数值到达自动重装载寄存器时，产生更新时间，清零重新计数</p>
-</li>
-<li><p><strong>自动重装载寄存器</strong>	ARR 是一个16位计数器，存放最大计数值，到达此值，如果开启中断，则定时器产生中断</p>
-</li>
-</ol>
-<h3 id="定时时间计算"><a href="#定时时间计算" class="headerlink" title="定时时间计算"></a>定时时间计算</h3><p>定时器的定时时间等于计数器的中断周期乘以中断的次数。这里用定时 500ms 作为例子：</p>
-<ul>
-<li>设置PSC预分频器为 72 - 1 &#x3D; 71 MHz，则定时器频率为 72M&#x2F;(PSC + 1) &#x3D; 1 MHz</li>
-<li>设置 ARR &#x3D; 1000 - 1，0 ~ 999，计数1000次</li>
-<li>中断周期 T &#x3D; 1000 * 1 &#x2F; 1000000 &#x3D; 1 ms，（1MHz 周期为 1 ns）</li>
-</ul>
-<h3 id="定时器初始化结构体"><a href="#定时器初始化结构体" class="headerlink" title="定时器初始化结构体"></a>定时器初始化结构体</h3><p>基本定时器只用到<code>TIM_TimeBaseInitTypeDef</code>结构体：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    <span class="type">uint16_t</span> TIM_Prescaler; 		<span class="comment">// 预分频器</span></span><br><span class="line">    <span class="type">uint16_t</span> TIM_CounterMode; 		<span class="comment">// 计数模式，向上或向下</span></span><br><span class="line">    <span class="type">uint32_t</span> TIM_Period; 			<span class="comment">// 定时器周期</span></span><br><span class="line">    <span class="type">uint16_t</span> TIM_ClockDivision; 	<span class="comment">// 外部时钟分频</span></span><br><span class="line">    <span class="type">uint8_t</span> TIM_RepetitionCounter; 	<span class="comment">// 重复计算器，高级寄存器专用</span></span><br><span class="line">&#125; TIM_TimeBaseInitTypeDef;</span><br></pre></td></tr></table></figure>
+  <%- partial('_partial/header') %>
 
-<p>而且只用到两个成员<code>TIM_Prescaler</code>和<code>TIM_Period</code>，也就是定时器分配器设置和定时器周期（自动重装载寄存器值）。</p>
-<h3 id="代码实例——实现-1s-定时"><a href="#代码实例——实现-1s-定时" class="headerlink" title="代码实例——实现 1s 定时"></a>代码实例——实现 1s 定时</h3><p><strong>初始化基本定时器</strong></p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/********************基本定时器 TIM 参数定义，只限 TIM6、 7************/</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> BASIC_TIM6 		<span class="comment">// 如果使用 TIM7，注释掉这个宏即可</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span>  BASIC_TIM6 		<span class="comment">// 使用基本定时器 TIM6</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> BASIC_TIM 						TIM6</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> BASIC_TIM_APBxClock_FUN 		RCC_APB1PeriphClockCmd</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> BASIC_TIM_CLK 					RCC_APB1Periph_TIM6</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> BASIC_TIM_IRQ 					TIM6_IRQn</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> BASIC_TIM_IRQHandler 			TIM6_IRQHandler</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">else</span> 					<span class="comment">// 使用基本定时器 TIM7</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> BASIC_TIM 						TIM7						<span class="comment">// 定时器</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> BASIC_TIM_APBxClock_FUN 		RCC_APB1PeriphClockCmd		<span class="comment">// 时钟函数</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> BASIC_TIM_CLK 					RCC_APB1Periph_TIM7			<span class="comment">// 时钟</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> BASIC_TIM_IRQ 					TIM7_IRQn					<span class="comment">// 中断源</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> BASIC_TIM_IRQHandler 			TIM7_IRQHandler				<span class="comment">// 中断服务函数</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+  <body>
+    <div id="app">
+      <%- partial('_partial/navigation') %>
 
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">BASIC_TIM_Config</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 开启定时器时钟，即内部时钟 CK_INT=72M</span></span><br><span class="line">    BASIC_TIM_APBxClock_FUN(BASIC_TIM_CLK, ENABLE);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 自动重装载寄存器周的值(计数值)</span></span><br><span class="line">    TIM_TimeBaseStructure.TIM_Period=<span class="number">1000</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 累计 TIM_Period 个频率后产生一个更新或者中断</span></span><br><span class="line">    <span class="comment">// 时钟预分频数为 71，则驱动计数器的时钟 CK_CNT = CK_INT / (71+1)=1M</span></span><br><span class="line">    TIM_TimeBaseStructure.TIM_Prescaler= <span class="number">71</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 其余三个结构体变量，基本定时器没有，不用管</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 初始化定时器</span></span><br><span class="line">    TIM_TimeBaseInit(BASIC_TIM, &amp;TIM_TimeBaseStructure);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 清除计数器中断标志位</span></span><br><span class="line">    TIM_ClearFlag(BASIC_TIM, TIM_FLAG_Update);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 开启计数器中断</span></span><br><span class="line">    TIM_ITConfig(BASIC_TIM,TIM_IT_Update,ENABLE);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使能计数器</span></span><br><span class="line">    TIM_Cmd(BASIC_TIM, ENABLE);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 暂时关闭定时器的时钟，等待使用</span></span><br><span class="line">    BASIC_TIM_APBxClock_FUN(BASIC_TIM_CLK, DISABLE);</span><br><span class="line"> &#125;  </span><br></pre></td></tr></table></figure>
+      <div class="flex-container">
+        <%- body %>
+        <%- partial('_partial/footer') %>
+      </div>
 
-<p>把定时器设置自动重装载寄存器 ARR 的值为 1000，设置时钟预分频器为 71，则驱动计数器的时钟： CK_CNT &#x3D; CK_INT &#x2F; (71+1)&#x3D;1M，则计数器计数一次的时间等于：1&#x2F;CK_CNT&#x3D;1us，当计数器计数到 ARR 的值 1000 时，产生一次中断，则中断一次的时间为： 1&#x2F;CK_CNT*ARR &#x3D; 1ms。  </p>
-<p><strong>定时器中断优先级配置</strong>  </p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 中断优先级配置</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">BASIC_TIM_NVIC_Config</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    NVIC_InitTypeDef NVIC_InitStructure;</span><br><span class="line">    <span class="comment">// 设置中断组为 0</span></span><br><span class="line">    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0);</span><br><span class="line">    <span class="comment">// 设置中断来源为基本定时器</span></span><br><span class="line">    NVIC_InitStructure.NVIC_IRQChannel = BASIC_TIM_IRQ ;</span><br><span class="line">    <span class="comment">// 设置主优先级为 0</span></span><br><span class="line">    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// 设置抢占优先级为 3</span></span><br><span class="line">    NVIC_InitStructure.NVIC_IRQChannelSubPriority = <span class="number">3</span>;</span><br><span class="line">    </span><br><span class="line">    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;</span><br><span class="line">    NVIC_Init(&amp;NVIC_InitStructure);</span><br><span class="line"> &#125;  </span><br></pre></td></tr></table></figure>
+      <div class="tools-bar">
+        <%- partial('_partial/backtotop') %>
 
-<p><strong>定时器中断服务程序</strong>  </p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">BASIC_TIM_IRQHandler</span> <span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> ( TIM_GetITStatus( BASIC_TIM, TIM_IT_Update) != RESET ) &#123;</span><br><span class="line">        time++;</span><br><span class="line">        TIM_ClearITPendingBit(BASIC_TIM , TIM_FLAG_Update);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        <%- partial('_partial/search') %>
 
-<p>定时器中断一次的时间是 1ms，定义一个全局变量 time 表示中断次数。实现一个 1s 的定时，只需判断 time 是否等于 1000 即可， 1000 * 1ms &#x3D; 1s。然后把 time 清 0，重新计数，在最后，需要将中断标志位清除掉。 </p>
-<p><strong>主函数</strong></p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">/* led 端口配置 */</span></span><br><span class="line">    LED_GPIO_Config();</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 基本定时器 TIMx,x[6,7] 定时配置 */</span></span><br><span class="line">    BASIC_TIM_Config();</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 配置基本定时器 TIMx,x[6,7]的中断优先级 */</span></span><br><span class="line">    BASIC_TIM_NVIC_Config();</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 基本定时器 TIMx,x[6,7] 重新开时钟，开始计时 */</span></span><br><span class="line">    BASIC_TIM_APBxClock_FUN(BASIC_TIM_CLK, ENABLE);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">    	<span class="keyword">if</span> ( time == <span class="number">1000</span> ) &#123; </span><br><span class="line">        	<span class="comment">/* 1000 * 1 ms = 1s 时间到 */</span></span><br><span class="line">            time = <span class="number">0</span>;</span><br><span class="line">            <span class="comment">/* LED1 取反 */</span></span><br><span class="line">            LED1_TOGGLE;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+        <%- partial('_partial/colorscheme') %>
 
-<h3 id="代码实例——获取指令执行时间"><a href="#代码实例——获取指令执行时间" class="headerlink" title="代码实例——获取指令执行时间"></a>代码实例——获取指令执行时间</h3></article><div id="paginator"></div></main><footer><div class="icon-wrapper in-left"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg></span></button></div><div class="icon-wrapper in-right"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg></span></button></div><p class="copyright-text"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">CC BY-NC-SA 4.0</a><span>·</span><a href="https://github.com/ttttonyhe/ouorz-mono" target="_blank" rel="noreferrer">Open Source Software (OSS)</a></p></footer><script src="/js/ouo.js"></script></div></body></html>
+        <%- partial('_partial/shares') %>
+      </div>
+    </div>
+  </body>
+</html>

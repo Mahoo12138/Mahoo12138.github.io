@@ -1,44 +1,26 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>学习及开发中的 Java 语法及理论学习 [ Mahoo12138 ]</title><link rel="stylesheet" href="/css/index.css"><meta name="post"><link rel="stylesheet" href="/css/layouts/post.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="hexo-container"><header></header><main id="content"><article id="post"><h1>学习及开发中的 Java 语法及理论学习</h1><h2 id="理论"><a href="#理论" class="headerlink" title="理论"></a>理论</h2><h3 id="理解java回调机制"><a href="#理解java回调机制" class="headerlink" title="理解java回调机制"></a>理解java回调机制</h3><p>[技术详解]: <a target="_blank" rel="noopener" href="https://blog.csdn.net/xiaanming/article/details/8703708">https://blog.csdn.net/xiaanming/article/details/8703708</a>	“一个经典例子让你彻彻底底理解java回调机制”</p>
-<h3 id="android开发中的同步和异步区别的理解"><a href="#android开发中的同步和异步区别的理解" class="headerlink" title="android开发中的同步和异步区别的理解"></a>android开发中的同步和异步区别的理解</h3><ul>
-<li><p>同步执行的话，就是程序会呆板地从头执行到尾，耗时间的东西不执行完，程序不会继续往下走，等待时间长的话，有时候就会造成失去响应了。</p>
-<p>异步的好处，就是把一些东西，特别是耗时间的东西扔到后台去运行了(doInBackground)，程序可以继续做自己的事情，防止程序卡在那里失去响应。</p>
-</li>
-<li><p>同步是指两个线程的运行是相关的，其中一个线程要阻塞等待另外一个线程的运行。<br>异步的意思是两个线程毫无相关，自己运行自己的。</p>
-</li>
-<li><p>同步是指：发送方发出数据后，等接收方发回响应以后才发下一个数据包的通讯方式。<br>异步是指：发送方发出数据后，不等接收方发回响应，接着发送下个数据包的通讯方式。</p>
-</li>
-<li><p>同步：提交请求-&gt;等待服务器处理-&gt;处理完毕返回 这个期间客户端浏览器不能干任何事<br>异步: 请求通过事件触发-&gt;服务器处理（这是浏览器仍然可以作其他事情）-&gt;处理完毕</p>
-</li>
-<li><p>同步就是你叫我去吃饭，我听到了就和你去吃饭；如果没有听到，你就不停的叫，直到我告诉你听到了，才一起去吃饭。</p>
-<p>异步就是你叫我，然后自己去吃饭，我得到消息后可能立即走，也可能等到下班才去吃饭。  </p>
-</li>
-<li><p><strong>个人理解</strong>：</p>
-<ul>
-<li>同步就是两个人一起工作，必须前一个人把手上的活干完，第二个人才能开始干</li>
-<li>异步则是两个人分开各自闷声发大财，相互没影响</li>
-</ul>
-</li>
-</ul>
-<p>[原帖链接]: <a target="_blank" rel="noopener" href="https://blog.csdn.net/u012301501/article/details/53386503">https://blog.csdn.net/u012301501/article/details/53386503</a>	“android开发中的同步和异步区别的理解”</p>
-<h2 id="indexOf-和-lastIndexOf"><a href="#indexOf-和-lastIndexOf" class="headerlink" title="indexOf 和 lastIndexOf"></a>indexOf 和 lastIndexOf</h2><p>从名字上来看，二者都是索引，区别是：</p>
-<ul>
-<li>indexOf 是查询某个字符子串在字符串中<strong>首次</strong>出现的位置（索引值）</li>
-<li>lastIndexOf 有四种重载：<ul>
-<li><strong>public int lastIndexOf(int ch):</strong> 返回指定字符在此字符串中最后一次出现处的索引，如果此字符串中没有这样的字符，则返回 -1。</li>
-<li><strong>public int lastIndexOf(int ch, int fromIndex):</strong> 返回指定字符在此字符串中最后一次出现处的索引，如果此字符串中没有这样的字符，则返回 -1。</li>
-<li><strong>public int lastIndexOf(String str):</strong> 返回指定字符在此字符串中最后一次出现处的索引，如果此字符串中没有这样的字符，则返回 -1。</li>
-<li><strong>public int lastIndexOf(String str, int fromIndex):</strong> 返回指定字符在此字符串中最后一次出现处的索引，如果此字符串中没有这样的字符，则返回 -1。</li>
-</ul>
-</li>
-</ul>
-<p>实例：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Test</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String args[])</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">Str</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;mahoo12138&quot;</span>);</span><br><span class="line">        <span class="type">String</span> <span class="variable">SubStr1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;oo&quot;</span>);</span><br><span class="line">        <span class="type">String</span> <span class="variable">SubStr2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;12138&quot;</span>);</span><br><span class="line"></span><br><span class="line">        System.out.print(<span class="string">&quot;查找字符 o 最后出现的位置 :&quot;</span> );</span><br><span class="line">        System.out.println(Str.lastIndexOf( <span class="string">&#x27;o&#x27;</span> ));</span><br><span class="line"></span><br><span class="line">        System.out.print(<span class="string">&quot;从第4个位置查找字符 o 最后出现的位置 :&quot;</span> );</span><br><span class="line">        System.out.println(Str.lastIndexOf( <span class="string">&#x27;o&#x27;</span>, <span class="number">4</span> ));</span><br><span class="line"></span><br><span class="line">        System.out.print(<span class="string">&quot;子字符串 SubStr1 最后出现的位置:&quot;</span> );</span><br><span class="line">        System.out.println( Str.lastIndexOf( SubStr1 ));</span><br><span class="line"></span><br><span class="line">        System.out.print(<span class="string">&quot;从第2个位置开始搜索子字符串 SubStr1 最后出现的位置 :&quot;</span> );</span><br><span class="line">        System.out.println( Str.lastIndexOf( SubStr1, <span class="number">8</span> ));</span><br><span class="line"></span><br><span class="line">        System.out.print(<span class="string">&quot;子字符串 SubStr2 最后出现的位置 :&quot;</span> );</span><br><span class="line">        System.out.println(Str.lastIndexOf( SubStr2 ));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<!DOCTYPE html>
+<html lang="<%= config.language %>" color-mode="light">
 
-<h2 id="System-out-println-方法和-toString-方法"><a href="#System-out-println-方法和-toString-方法" class="headerlink" title="System.out.println() 方法和 toString() 方法"></a>System.out.println() 方法和 toString() 方法</h2><p>Object 有个 toString 实例方法。Object 类的 toString 方法返回一个字符串，该字符串由类名（对象是该类的一个实例）、a t标记符“@”和此对象哈希码的无符号十六进制表示组成。换句话说，该方法返回一个字符串，它的值等于：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">getClass().getName() <span class="string">&#x27;@&#x27;</span> Integer.toHexString(hashCode())</span><br></pre></td></tr></table></figure>
+  <%- partial('_partial/header') %>
 
-<p>而在 Java 中，所有的对象都是继承自 Object，因此所有的 Java 对象都具有<code>toString</code>方法。</p>
-<p>但很多类都重写了Object类的<code>toString</code>方法，用于返回可以表述该对象信息的字符串。</p>
-<p>当程序使用<code>System.out.println()</code>方法输出一个对象，或者把某个对象和字符串进行连接运算时，系统会自动调用该对象的<code>toString</code>方法返回该对象的字符串表示。</p>
-<p>当然，空引用变量调用<code>toString</code>方法，会引起空指针异常。</p>
-</article><div id="paginator"></div></main><footer><div class="icon-wrapper in-left"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg></span></button></div><div class="icon-wrapper in-right"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg></span></button></div><p class="copyright-text"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">CC BY-NC-SA 4.0</a><span>·</span><a href="https://github.com/ttttonyhe/ouorz-mono" target="_blank" rel="noreferrer">Open Source Software (OSS)</a></p></footer><script src="/js/ouo.js"></script></div></body></html>
+  <body>
+    <div id="app">
+      <%- partial('_partial/navigation') %>
+
+      <div class="flex-container">
+        <%- body %>
+        <%- partial('_partial/footer') %>
+      </div>
+
+      <div class="tools-bar">
+        <%- partial('_partial/backtotop') %>
+
+        <%- partial('_partial/search') %>
+
+        <%- partial('_partial/colorscheme') %>
+
+        <%- partial('_partial/shares') %>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,31 +1,26 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>使用 Tasker 自动播放 QQ 音乐歌单 [ Mahoo12138 ]</title><link rel="stylesheet" href="/css/index.css"><meta name="post"><link rel="stylesheet" href="/css/layouts/post.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="hexo-container"><header></header><main id="content"><article id="post"><h1>使用 Tasker 自动播放 QQ 音乐歌单</h1><p>最近突然有这么个想法，想在早上快起床的时候，也就是闹钟响之前的那段时间，自动播放一些轻柔的音乐，比如<a target="_blank" rel="noopener" href="https://zh.m.wikipedia.org/zh-hans/%E7%8F%AD%E5%BE%97%E7%91%9E_(%E9%9F%B3%E4%B9%90%E9%A1%B9%E7%9B%AE)">班得瑞</a>之类的，可以闭着眼睛享受一下上班前这段闲暇时光；</p>
-<h2 id="获取打开链接"><a href="#获取打开链接" class="headerlink" title="获取打开链接"></a>获取打开链接</h2><p>首先，我们现在 QQ 音乐内创建好自己的一个歌单，然后点击页面内的<strong>分享</strong>按钮，复制链接，然后在浏览器打开；</p>
-<p>在网页中，打开该歌单后，页面可能会自动弹出询问的 Dialog 确认是否在 App 中查看，如果没有弹出，可手动点击，页面中的在 App 中打开的按钮。</p>
-<p>打开页面时，则可以复制我们的歌单的直达链接了。</p>
-<p>注意这里需要特定的浏览器，才能显示并能复制歌单的直达链接，这里推荐使用 <a target="_blank" rel="noopener" href="https://coolapk.com/apk/alook.browser">Alook</a> 浏览器，方便快捷。</p>
-<img src="https://cdn.jsdelivr.net/gh/mahoo12138/js-css-cdn/hexo-images/tutorials/tasker/step-1.jpg" alt="获取快捷链接" style="zoom: 50%;" />
+<!DOCTYPE html>
+<html lang="<%= config.language %>" color-mode="light">
 
-<h2 id="设置定时任务"><a href="#设置定时任务" class="headerlink" title="设置定时任务"></a>设置定时任务</h2><p>有了，直达链接，我们就可以放开手干活了，这里需要两个工具：</p>
-<ul>
-<li>Tasker：一款非常优秀的，全面的自动化工具，几乎无所不能；</li>
-<li>TouchTask：Tasker 体系下的一个插件，用于实现自动化点击；</li>
-</ul>
-<p>上述工具都能在博主的 Onedrive 站点中分享了，<a target="_blank" rel="noopener" href="https://yun.mahoo12138.cn/zh-CN/%F0%9F%94%A7Apps/%E3%80%90%E8%87%AA%E5%8A%A8%E5%8C%96%E5%B7%A5%E5%85%B7%E3%80%91Tasker%20%E5%8F%8A%E6%8F%92%E4%BB%B6/">戳我</a>查看下载；</p>
-<h3 id="设置触发条件"><a href="#设置触发条件" class="headerlink" title="设置触发条件"></a>设置触发条件</h3><p>进入 Tasker 后，首先新建一个配置文件 【Profile】，选择时间【Time】，指定任务触发的具体时间，这样第一步也就完成了；</p>
-<img src="https://cdn.jsdelivr.net/gh/mahoo12138/js-css-cdn/hexo-images/tutorials/tasker/step-2.jpg" alt="新建配置任务" style="zoom:67%;" />
+  <%- partial('_partial/header') %>
 
-<h3 id="配置触发任务"><a href="#配置触发任务" class="headerlink" title="配置触发任务"></a>配置触发任务</h3><p>配置文件新建后，会立刻要求设置一个任务【Task】，可以选择新建一个【New Task】，并输入备注名称，也可以直接确定，作为这个配置文件专属的匿名任务；</p>
-<p>进入配置任务，先新建一个浏览 URL 【Browse URL】的操作【Action】，在此则把我们获取到的歌单直达链接粘贴进去即可；</p>
-<p>然后，我们需要根据自身手机具体情况，设置一定的缓冲等待时间，这样之后的点击任务才能有效的执行；</p>
-<p>选择任务【Task】-&gt; 等待【Wait】，可以先点击任务配置页面左下方的手动执行按钮，实测一下，QQ 音乐在冷启动时进入我们的歌单所花费的时间，注意是冷启动，也就是 QQ 音乐在完全停止的情况下；</p>
-<p>最后，则是我们的压轴任务【TouchTask】，同样的，我们新建一个任务操作，选择插件【Plugin】，并点击主角【TouchTask】，进入插件配置后，点击【Configuration】后的 Icon 进行新建，以下是具体配置项：</p>
-<ul>
-<li><strong>操作 Action</strong>：选择【Tap】，这里我们主要需要点击歌单内的<strong>全部播放按钮</strong>实现播放；</li>
-<li><strong>选择方式 Selection method</strong>：即进行 Tap 点击时，目标的选择方式，我们选择【Text】，因为 QQ 音乐或者说是鹅厂家好几款 App 都是其自研的跨端框架开发的，内部其实是 WebView，也就是网页，无法使用 ID 进行 View 筛选；</li>
-<li><strong>选择点 Selection point</strong>：也就是上一个配置项的具体值，输入【全部播放】；</li>
-<li>其他的可选选项，可根据自己需求酌情配置；</li>
-</ul>
-<img src="https://cdn.jsdelivr.net/gh/mahoo12138/js-css-cdn/hexo-images/tutorials/tasker/step-3.jpg" alt="任务配置详情" style="zoom:67%;" />
+  <body>
+    <div id="app">
+      <%- partial('_partial/navigation') %>
 
-<p>到这里，整个自动播放的操作已经完全实现了，其他一些细节例如文字提示，音量，自动停止播放，都可以根据自己需求配置。</p>
-</article><div id="paginator"></div></main><footer><div class="icon-wrapper in-left"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg></span></button></div><div class="icon-wrapper in-right"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg></span></button></div><p class="copyright-text"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">CC BY-NC-SA 4.0</a><span>·</span><a href="https://github.com/ttttonyhe/ouorz-mono" target="_blank" rel="noreferrer">Open Source Software (OSS)</a></p></footer><script src="/js/ouo.js"></script></div></body></html>
+      <div class="flex-container">
+        <%- body %>
+        <%- partial('_partial/footer') %>
+      </div>
+
+      <div class="tools-bar">
+        <%- partial('_partial/backtotop') %>
+
+        <%- partial('_partial/search') %>
+
+        <%- partial('_partial/colorscheme') %>
+
+        <%- partial('_partial/shares') %>
+      </div>
+    </div>
+  </body>
+</html>

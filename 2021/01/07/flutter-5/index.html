@@ -1,52 +1,26 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Flutter 进阶学习之画板 [ Mahoo12138 ]</title><link rel="stylesheet" href="/css/index.css"><meta name="post"><link rel="stylesheet" href="/css/layouts/post.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="hexo-container"><header></header><main id="content"><article id="post"><h1>Flutter 进阶学习之画板</h1><h2 id="简单介绍"><a href="#简单介绍" class="headerlink" title="简单介绍"></a>简单介绍</h2><p><code>CustomPaint </code>可以称之为动画鼻祖，它可以实现任何酷炫的动画和效果。CustomPaint 本身没有动画属性，仅仅是绘制属性，一般情况下，CustomPaint 会和动画控制配合使用，达到理想的效果；CustomPaint 继承自<code>SingleChildRenderObjectWidget</code>，所以不能用 <code>setState()</code> 来刷新。</p>
-<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> CustomPaint(&#123;</span><br><span class="line">    Key key,</span><br><span class="line">    <span class="keyword">this</span>.painter,</span><br><span class="line">    <span class="keyword">this</span>.foregroundPainter,</span><br><span class="line">    <span class="keyword">this</span>.size = Size.zero,</span><br><span class="line">    <span class="keyword">this</span>.isComplex = <span class="keyword">false</span>,</span><br><span class="line">    <span class="keyword">this</span>.willChange = <span class="keyword">false</span>,</span><br><span class="line">    Widget child,</span><br><span class="line">&#125;) </span><br></pre></td></tr></table></figure>
+<!DOCTYPE html>
+<html lang="<%= config.language %>" color-mode="light">
 
-<p>其中：</p>
-<ul>
-<li>painter 就是我们的主绘制工具，它是一个 CustomPainter 画笔角色；</li>
-<li>foregroundPainter 是用来绘制前景的工具；</li>
-<li>size 为画布大小，这个 size 会传递给 Painter；</li>
-<li>isComplex 和 willChange 是告诉 Flutter 你的 CustomPaint 是否复杂到需要使用 cache 相关的功能；</li>
-<li>child 属性我们一般不填，即使想要在 CustomPaint 上添加一些其他的布局，也不建议放在 child 属性中，很难得到想要的结果。</li>
-</ul>
-<h2 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h2><p>CustomPaint 的用法非常简单，绘制的代码写在我们的自定义 CustomPainter 中，如下：</p>
-<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CustomPaint(</span><br><span class="line">  painter: MyCustomPainter(),</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+  <%- partial('_partial/header') %>
 
-<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyCustomPainter</span> <span class="keyword">extends</span> <span class="title">CustomPainter</span> </span>&#123;</span><br><span class="line">  <span class="comment">/// <span class="language-markdown">重写绘制流程函数，当前什么也没做</span></span></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  <span class="keyword">void</span> paint(Canvas canvas, Size size) &#123;&#125;</span><br><span class="line">    </span><br><span class="line">  <span class="comment">/// <span class="language-markdown">重写控制自定义 View 是否需要重绘的函数，返回 false 代表这个 View 在构建完成后不需要重绘</span></span></span><br><span class="line">  <span class="comment">/// <span class="language-markdown">也就是当该实例内属性变化时返回 true。</span></span></span><br><span class="line">  <span class="meta">@override</span></span><br><span class="line">  <span class="built_in">bool</span> shouldRepaint(CustomPainter oldDelegate) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+  <body>
+    <div id="app">
+      <%- partial('_partial/navigation') %>
 
-<p>当然，还可以设置画笔的一些属性：</p>
-<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyCustomPainter</span> <span class="keyword">extends</span> <span class="title">CustomPainter</span> </span>&#123;</span><br><span class="line">    <span class="comment">/// <span class="language-markdown">...</span></span></span><br><span class="line">    Paint _paint = Paint()</span><br><span class="line">        ..color = Colors.blue			<span class="comment">///<span class="language-markdown"><span class="code">	画笔颜色</span></span></span></span><br><span class="line">        ..style = PaintingStyle.stroke	<span class="comment">/// <span class="language-markdown"><span class="code">画笔样式</span></span></span></span><br><span class="line">        ..strokeWidth = <span class="number">12.0</span></span><br><span class="line">        ..isAntiAlias = <span class="keyword">true</span>;			<span class="comment">/// <span class="language-markdown"><span class="code">抗锯齿</span></span></span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      <div class="flex-container">
+        <%- body %>
+        <%- partial('_partial/footer') %>
+      </div>
 
-<p><code>PaintingStyle.stroke</code> 指的是直接将画笔画在路径的边缘，例如绘制一个圆时，只是边缘有画笔的轨迹，而不是绘制出一个圆饼；<code>strokeWidth</code>即为绘制的宽度。</p>
-<h3 id="绘制点"><a href="#绘制点" class="headerlink" title="绘制点"></a>绘制点</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@override</span></span><br><span class="line"><span class="keyword">void</span> paint(Canvas canvas, Size size) &#123;</span><br><span class="line">    <span class="keyword">var</span> points = [</span><br><span class="line">        Offset(<span class="number">0</span>, <span class="number">0</span>),</span><br><span class="line">        Offset(<span class="number">0</span>, <span class="number">100</span>),</span><br><span class="line">        Offset(<span class="number">0</span>, <span class="number">200</span>),</span><br><span class="line">        Offset(<span class="number">0</span>, <span class="number">300</span>),</span><br><span class="line">        Offset(<span class="number">0</span>, <span class="number">400</span>),</span><br><span class="line">        Offset(<span class="number">0</span>, <span class="number">500</span>),</span><br><span class="line">        Offset(<span class="number">0</span>, <span class="number">600</span>),</span><br><span class="line">    ];</span><br><span class="line">    canvas.drawPoints(PointMode.points, points, _paint);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      <div class="tools-bar">
+        <%- partial('_partial/backtotop') %>
 
-<p><img src="D:\Mahoo12138\Workbench\临时文件\image-20210123171107807.png"></p>
-<p><code>PointMode</code>定义了一组坐标怎样解释，有 3 种模式：</p>
-<ul>
-<li>points：点，单独将这些点绘制</li>
-<li>lines：将 2 个点绘制为线段，如果点的个数为奇数，最后一个点将会被忽略</li>
-<li>polygon：将整个点绘制为一条线</li>
-</ul>
-<h3 id="绘制线"><a href="#绘制线" class="headerlink" title="绘制线"></a>绘制线</h3> <figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">canvas.drawLine(Offset(<span class="number">50</span>, <span class="number">50</span>),Offset(<span class="number">200</span>, <span class="number">200</span>), _paint);</span><br></pre></td></tr></table></figure>
+        <%- partial('_partial/search') %>
 
-<p><img src="D:\Mahoo12138\Workbench\临时文件\image-20210123172700178.png"></p>
-<h3 id="绘制路径"><a href="#绘制路径" class="headerlink" title="绘制路径"></a>绘制路径</h3><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> paint(Canvas canvas, Size size) &#123;</span><br><span class="line">    <span class="keyword">var</span> _path = Path()</span><br><span class="line">        ..moveTo(<span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line">        ..lineTo(<span class="number">100</span>, <span class="number">100</span>)</span><br><span class="line">        ..lineTo(<span class="number">-150</span>, <span class="number">400</span>)</span><br><span class="line">        ..close();</span><br><span class="line">    canvas.drawPath(_path, _paint);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        <%- partial('_partial/colorscheme') %>
 
-<p><img src="D:\Mahoo12138\Workbench\临时文件\image-20210123180942770.png"></p>
-<blockquote>
-<p>这里注意<code>Paint.style</code>，还可以设置为<code>PaintingStyle.fill</code>，可将路径包围的范围填充。</p>
-</blockquote>
-<h3 id="绘制各种形状"><a href="#绘制各种形状" class="headerlink" title="绘制各种形状"></a>绘制各种形状</h3><h4 id="绘制圆形"><a href="#绘制圆形" class="headerlink" title="绘制圆形"></a>绘制圆形</h4><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">canvas.drawCircle(Offset(<span class="number">0</span>, size.height/<span class="number">2</span>), <span class="number">50</span>, _paint);</span><br></pre></td></tr></table></figure>
-
-<h4 id="绘制椭圆"><a href="#绘制椭圆" class="headerlink" title="绘制椭圆"></a>绘制椭圆</h4><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">canvas.drawOval(Rect.fromLTRB(<span class="number">-200</span>, <span class="number">100</span>, <span class="number">200</span>, <span class="number">300</span>), _paint);</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>在矩形内画椭圆，如果矩形为正方形，则椭圆为圆。</p>
-</blockquote>
-<h4 id="绘制弧"><a href="#绘制弧" class="headerlink" title="绘制弧"></a>绘制弧</h4><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">canvas.drawArc(Rect.fromLTRB(<span class="number">-200</span>, <span class="number">0</span>, <span class="number">100</span>, <span class="number">300</span>), <span class="number">0</span>, pi/<span class="number">2</span>, <span class="keyword">true</span>, _paint);</span><br></pre></td></tr></table></figure>
-
-<h4 id="绘制圆角矩形"><a href="#绘制圆角矩形" class="headerlink" title="绘制圆角矩形"></a>绘制圆角矩形</h4><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">canvas.drawRRect(RRect.fromLTRBR(<span class="number">-200</span>, <span class="number">200</span>, <span class="number">200</span>, <span class="number">400</span>, Radius.circular(<span class="number">10</span>)), _paint);</span><br></pre></td></tr></table></figure>
-
-
-
-</article><div id="paginator"></div></main><footer><div class="icon-wrapper in-left"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg></span></button></div><div class="icon-wrapper in-right"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg></span></button></div><p class="copyright-text"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">CC BY-NC-SA 4.0</a><span>·</span><a href="https://github.com/ttttonyhe/ouorz-mono" target="_blank" rel="noreferrer">Open Source Software (OSS)</a></p></footer><script src="/js/ouo.js"></script></div></body></html>
+        <%- partial('_partial/shares') %>
+      </div>
+    </div>
+  </body>
+</html>

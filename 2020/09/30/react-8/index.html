@@ -1,43 +1,26 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>React学习之Reac原理解密 [ Mahoo12138 ]</title><link rel="stylesheet" href="/css/index.css"><meta name="post"><link rel="stylesheet" href="/css/layouts/post.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="hexo-container"><header></header><main id="content"><article id="post"><h1>React学习之Reac原理解密</h1><h2 id="setState-详解"><a href="#setState-详解" class="headerlink" title="setState() 详解"></a>setState() 详解</h2><h3 id="更新数据是异步的"><a href="#更新数据是异步的" class="headerlink" title="更新数据是异步的"></a>更新数据是异步的</h3><figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">this</span>.<span class="property">state</span> = &#123;<span class="attr">count</span>: <span class="number">1</span>&#125;</span><br><span class="line"><span class="variable language_">this</span>.<span class="title function_">setState</span>(&#123;<span class="attr">count</span>: <span class="variable language_">this</span>.<span class="property">state</span>.<span class="property">count</span> + <span class="number">1</span>&#125;)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>.<span class="property">state</span>.<span class="property">count</span>)		<span class="comment">// 1</span></span><br></pre></td></tr></table></figure>
+<!DOCTYPE html>
+<html lang="<%= config.language %>" color-mode="light">
 
-<p>可以将 <code>setState()</code> 视为<strong>请求</strong>而不是立即更新组件的命令，给我们的启示是，在更新状态时，后面的 <code>setState()</code> 不要依赖于前面的<code>setState()</code>；而且多次调用，只会触发一次重新渲染；</p>
-<p>例如，如果父组件和子组件在同一个 <strong>click</strong> 事件中都调用了<code>setState</code> ，这样就可以确保子组件不会被重新渲染两次，React 会将该 state “冲洗” 到浏览器事件结束的时候，再统一地进行更新。这种机制可以在大型应用中得到很好的性能提升。</p>
-<h3 id="推荐语法"><a href="#推荐语法" class="headerlink" title="推荐语法"></a>推荐语法</h3><ul>
-<li>state：表示最新的 state</li>
-<li>props：表示最新的 props</li>
-</ul>
-<p>这样的传入回调的语法即可保证每次拿到的 state 都是最新的，则可实现<code>setState</code>叠加更新数据请求了：</p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">this</span>.<span class="title function_">setState</span>(<span class="function">(<span class="params">state, props</span>)=&gt;</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="attr">count</span>: state.<span class="property">count</span> + <span class="number">1</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+  <%- partial('_partial/header') %>
 
-<h3 id="回调函数"><a href="#回调函数" class="headerlink" title="回调函数"></a>回调函数</h3><p><code>setState</code>还有第二个参数，为一个回调函数，可在状态更新（页面重新渲染后），立即执行某个操作：</p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">this</span>.<span class="title function_">setState</span>(</span><br><span class="line">	<span class="function">(<span class="params">state, props</span>)=&gt;</span>&#123;&#125;,</span><br><span class="line">  <span class="function">()=&gt;</span>&#123;<span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;OK&quot;</span>)&#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+  <body>
+    <div id="app">
+      <%- partial('_partial/navigation') %>
 
-<h2 id="JSX-语法转化过程"><a href="#JSX-语法转化过程" class="headerlink" title="JSX 语法转化过程"></a>JSX 语法转化过程</h2><ul>
-<li><p>JSX 仅仅是<code>createElement()</code>方法的语法糖(简化语法)</p>
-</li>
-<li><p>JSX 语法被<code>@babel/preset-react</code>插件编译为<code>createElement()</code>方法</p>
-</li>
-<li><p>React 元素是一个对象，用来描述你希望在屏幕上看到的内容</p>
-</li>
-</ul>
-<h2 id="组件的更新机制"><a href="#组件的更新机制" class="headerlink" title="组件的更新机制"></a>组件的更新机制</h2><h2 id="组件性能优化"><a href="#组件性能优化" class="headerlink" title="组件性能优化"></a>组件性能优化</h2><ul>
-<li>减轻 state ：只存储跟组件渲染相关的数据；反之，不用做渲染的数据则不要放在 state 中；</li>
-<li>需要在多个方法中共享的数据且又不涉及渲染的数据，可直接存储在组件实例<code>this</code>中；</li>
-<li>避免不必要的组件重新渲染：使用生命周期钩子函数<code>shouldComponentUpdate(nextProps, nextState)</code>根据业务是否返回 <strong>false</strong>；</li>
-<li>使用<code>PureComponent</code>，自动加载<code>shouldComponentUpdate</code>函数，当组件更新时，<code>shouldComponentUpdate</code>对 props 和 state 进行了一层<strong>浅比较</strong>，如果都没有发生改变，render方法就不会触发，省去Virtual DOM的生成和对比过程；</li>
-<li>浅比较（shallow compare）只对象的引用（地址）是否相同；所以对于引用类型应该创建新的数据而不是修改原数据；</li>
-</ul>
-<h2 id="虚拟DOM和Diff算法"><a href="#虚拟DOM和Diff算法" class="headerlink" title="虚拟DOM和Diff算法"></a>虚拟DOM和Diff算法</h2><p>虚拟DOM：本质上是一个 JS 对象，用于描述在屏幕上看到的内容；</p>
-<ul>
-<li><p>初次渲染时，React会根据初始 state (Model) ，创建一个虚拟DOM对象(树)。</p>
-</li>
-<li><p>根据虚拟DOM生成真正的DOM，渲染到页面中。</p>
-</li>
-<li><p>当数据变化后（setState()），重新根据新的数据，创建新的虚拟DOM对象(树)。</p>
-</li>
-<li><p>与上一次得到的虚拟DOM对象，使用<code>Diff</code>算法对比(找不同) ，得到需要更新的内容。</p>
-</li>
-<li><p>最终，React 只将变化的内容更新(patch)到DOM中，重新渲染到页面。</p>
-</li>
-</ul>
-</article><div id="paginator"></div></main><footer><div class="icon-wrapper in-left"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg></span></button></div><div class="icon-wrapper in-right"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg></span></button></div><p class="copyright-text"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">CC BY-NC-SA 4.0</a><span>·</span><a href="https://github.com/ttttonyhe/ouorz-mono" target="_blank" rel="noreferrer">Open Source Software (OSS)</a></p></footer><script src="/js/ouo.js"></script></div></body></html>
+      <div class="flex-container">
+        <%- body %>
+        <%- partial('_partial/footer') %>
+      </div>
+
+      <div class="tools-bar">
+        <%- partial('_partial/backtotop') %>
+
+        <%- partial('_partial/search') %>
+
+        <%- partial('_partial/colorscheme') %>
+
+        <%- partial('_partial/shares') %>
+      </div>
+    </div>
+  </body>
+</html>

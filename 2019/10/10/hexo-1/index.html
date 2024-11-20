@@ -1,23 +1,26 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>hexo使用的不完全填坑指南 [ Mahoo12138 ]</title><link rel="stylesheet" href="/css/index.css"><meta name="post"><link rel="stylesheet" href="/css/layouts/post.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="hexo-container"><header></header><main id="content"><article id="post"><h1>hexo使用的不完全填坑指南</h1><h2 id="在内容里-不要与-紧挨着"><a href="#在内容里-不要与-紧挨着" class="headerlink" title="在内容里 # 不要与 { 紧挨着"></a>在内容里 # 不要与 { 紧挨着</h2><p>例如我的问题：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$\color&#123;black&#125;&#123;red&#125;$</span><br></pre></td></tr></table></figure>
+<!DOCTYPE html>
+<html lang="<%= config.language %>" color-mode="light">
 
-<p>出现错误时，黑色我用的是<code>#000</code>而不是<code>black</code>，然后在执行<code>hexo g</code>会有如下报错：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Template render error: (unknown path)</span><br><span class="line">  Error: expected end of comment, got end of file</span><br><span class="line">  ...</span><br></pre></td></tr></table></figure>
+  <%- partial('_partial/header') %>
 
-<p>我的解决方法很特殊，一般只在{ 与 # 之间添加一个空格即可。</p>
-<h2 id="尽量不要将-和-连接在一起"><a href="#尽量不要将-和-连接在一起" class="headerlink" title="尽量不要将{和{连接在一起"></a>尽量不要将<code>&#123;和&#123;</code>连接在一起</h2><ul>
-<li><p>报错信息</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Template render error: (unknown path) [Line XX, Column XX]</span><br><span class="line">  expected variable end</span><br><span class="line">  ...</span><br></pre></td></tr></table></figure>
+  <body>
+    <div id="app">
+      <%- partial('_partial/navigation') %>
 
-<p>后面还会附带文章的html代码，指出错误所在的准确位置；</p>
-</li>
-<li><p>报错原因</p>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">机器周期=$12\times&#123; &#123;1&#125;\over&#123;12&#125;&#125;MHz$=$1\mu&#123;s&#125;$。 </span><br></pre></td></tr></table></figure>
+      <div class="flex-container">
+        <%- body %>
+        <%- partial('_partial/footer') %>
+      </div>
 
-<p>经过查阅后发现， hexo 的文章渲染使用的是 <code>Nunjucks</code> ，因为在使用<code>mathjax</code>公式，造成了<code>&#123; &#123;</code>重叠，而它会在生成文章时将那几个大括号识别成自己的语法，这样就会报错。。</p>
-</li>
-<li><p>解决方法</p>
-<p>我的解决方法很弱智，但是有用，<strong>在<code>&#123;和&#123;</code>间添加空格</strong>，OK！</p>
-</li>
-</ul>
-</article><div id="paginator"></div></main><footer><div class="icon-wrapper in-left"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg></span></button></div><div class="icon-wrapper in-right"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg></span></button></div><p class="copyright-text"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">CC BY-NC-SA 4.0</a><span>·</span><a href="https://github.com/ttttonyhe/ouorz-mono" target="_blank" rel="noreferrer">Open Source Software (OSS)</a></p></footer><script src="/js/ouo.js"></script></div></body></html>
+      <div class="tools-bar">
+        <%- partial('_partial/backtotop') %>
+
+        <%- partial('_partial/search') %>
+
+        <%- partial('_partial/colorscheme') %>
+
+        <%- partial('_partial/shares') %>
+      </div>
+    </div>
+  </body>
+</html>

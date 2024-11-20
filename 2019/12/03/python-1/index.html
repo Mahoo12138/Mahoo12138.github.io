@@ -1,11 +1,26 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Python对文件进行批量重命名 [ Mahoo12138 ]</title><link rel="stylesheet" href="/css/index.css"><meta name="post"><link rel="stylesheet" href="/css/layouts/post.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="hexo-container"><header></header><main id="content"><article id="post"><h1>Python对文件进行批量重命名</h1><h2 id="代码及相关详解"><a href="#代码及相关详解" class="headerlink" title="代码及相关详解"></a>代码及相关详解</h2><p>最近没有在整STM32了，因为期末将近，必须花时间去预习了:joy:，但是还是忙里有偷闲，看到了以前看过的一些经典的影视作品动漫番剧，突然就想把这些作品的海报剧照等收藏起来，于是就淘遍整个网络下载下来好几百张图片，但是重命名就成了问题，Win10重命名的骚操作不会用，但是Python我会啊，谨以此文记录相关操作:wink:。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">filepath = <span class="string">&#x27;D:\Mahoo\Pictures\Saved Pictures\收藏&#x27;</span></span><br><span class="line"></span><br><span class="line">n = <span class="number">0</span></span><br><span class="line"><span class="comment"># 开始计时</span></span><br><span class="line">time_start = time.time()</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> file <span class="keyword">in</span> os.listdir(filepath):</span><br><span class="line">    <span class="comment"># 拼接文件目录</span></span><br><span class="line">    filedir = os.path.join(filepath, file)</span><br><span class="line">    <span class="keyword">if</span> os.path.isfile(filedir):</span><br><span class="line">        <span class="comment"># 新文件名格式</span></span><br><span class="line">        newname = <span class="string">&#x27;pic_&#x27;</span> + <span class="built_in">str</span>(n) + <span class="string">&#x27;.jpg&#x27;</span></span><br><span class="line">        n = n + <span class="number">1</span></span><br><span class="line">        <span class="comment"># 重命名</span></span><br><span class="line">        os.rename(filedir, os.path.join(filepath, newname))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 结束计时</span></span><br><span class="line">time_end = time.time()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;一共重命名&#123;&#125;次，耗时&#123;:.3&#125;秒 &#x27;</span>.<span class="built_in">format</span>(n, (time_end - time_start)))</span><br></pre></td></tr></table></figure>
+<!DOCTYPE html>
+<html lang="<%= config.language %>" color-mode="light">
 
-<h3 id="os-path-isdir"><a href="#os-path-isdir" class="headerlink" title="os.path.isdir()"></a>os.path.isdir()</h3><p>该函数判断某一路径是否为目录，返回一个<code>Bool</code>值：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="comment"># 判断D:\Mahoo\pic是否为文件</span></span><br><span class="line">os.path.isfile(<span class="string">&#x27;D:\\Mahoo\\pic&#x27;</span>)</span><br></pre></td></tr></table></figure>
+  <%- partial('_partial/header') %>
 
-<p>类似的即是<code>os.path.isfile()</code>，功能都可以顾名思义<strong>判断是否为文件</strong>。</p>
-<h3 id="os-path-join"><a href="#os-path-join" class="headerlink" title="os.path.join()"></a>os.path.join()</h3><p>该函数将多个路径组合后返回，例如：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">path1 = <span class="string">&#x27;D:\Mahoo&#x27;</span></span><br><span class="line">path2 = <span class="string">&#x27;Pictures&#x27;</span></span><br><span class="line"></span><br><span class="line">path3  =  os.path.join(path1,path2)</span><br><span class="line"><span class="built_in">print</span>(path3)</span><br><span class="line"><span class="comment"># D:\Mahoo\Pictures</span></span><br></pre></td></tr></table></figure>
+  <body>
+    <div id="app">
+      <%- partial('_partial/navigation') %>
 
-</article><div id="paginator"></div></main><footer><div class="icon-wrapper in-left"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg></span></button></div><div class="icon-wrapper in-right"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg></span></button></div><p class="copyright-text"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">CC BY-NC-SA 4.0</a><span>·</span><a href="https://github.com/ttttonyhe/ouorz-mono" target="_blank" rel="noreferrer">Open Source Software (OSS)</a></p></footer><script src="/js/ouo.js"></script></div></body></html>
+      <div class="flex-container">
+        <%- body %>
+        <%- partial('_partial/footer') %>
+      </div>
+
+      <div class="tools-bar">
+        <%- partial('_partial/backtotop') %>
+
+        <%- partial('_partial/search') %>
+
+        <%- partial('_partial/colorscheme') %>
+
+        <%- partial('_partial/shares') %>
+      </div>
+    </div>
+  </body>
+</html>

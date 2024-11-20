@@ -1,18 +1,26 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Flutter 入门学习之动画 [ Mahoo12138 ]</title><link rel="stylesheet" href="/css/index.css"><meta name="post"><link rel="stylesheet" href="/css/layouts/post.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="hexo-container"><header></header><main id="content"><article id="post"><h1>Flutter 入门学习之动画</h1><h2 id="AnimatedWidget"><a href="#AnimatedWidget" class="headerlink" title="AnimatedWidget"></a>AnimatedWidget</h2><blockquote>
-<p>当给定的<code>Listenable</code>的值改变时重新构建的部件。</p>
-</blockquote>
-<p>但需要为某一个Widget实现动画时，更多的情况是无状态的Widget，此时使用 <strong>AnimatedWidget</strong> 即可实现动画，只需继承并实现<code>build()</code>函数即可。<strong>AnimatedWidget</strong> 主要通过 <strong>Listenable</strong> 来监听小部件动画，主要是 <strong>Animation</strong> 对象，也包括<strong>ChangeNotifier</strong> 和 <strong>ValueNotifier</strong>。</p>
-<ul>
-<li><p><strong>AnimatedWidget</strong> 是一个抽象类，不能直接使用，但用众多子类可使用；</p>
-</li>
-<li><p><strong>AnimatedWidget</strong> 内部已封装好 <strong>setState()</strong> 状态更新Widget ，无需用户手动调用监听；</p>
-</li>
-</ul>
-<h3 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h3><p>这里我们直接贴出官方库的实例代码分析即可：代码中，绿色的 <strong>Container</strong> 容器动画会在 10 秒内从 0° 旋转到 360°，并且传入了动画控制器作为 <strong>listenable</strong>，可对动画进行复杂控制，Flutter 将此定义为<strong>显式动画</strong>，而<strong>隐式动画组件</strong>是只需提供给组件动画开始、结束值。</p>
-<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&#x27;dart:math&#x27;</span> <span class="keyword">as</span> math;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SpinningContainer</span> <span class="keyword">extends</span> <span class="title">AnimatedWidget</span> </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> SpinningContainer(&#123;Key key, AnimationController controller&#125;)</span><br><span class="line">        : <span class="keyword">super</span>(key: key, listenable: controller);</span><br><span class="line"></span><br><span class="line">    Animation&lt;<span class="built_in">double</span>&gt; <span class="keyword">get</span> _progress =&gt; listenable;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@override</span></span><br><span class="line">    Widget build(BuildContext context) &#123;</span><br><span class="line">        <span class="keyword">return</span> Transform.rotate(</span><br><span class="line">            angle: _progress.value * <span class="number">2.0</span> * math.pi,</span><br><span class="line">            child: child: Container(width: <span class="number">200.0</span>, height: <span class="number">200.0</span>, color: Colors.green),</span><br><span class="line">        )y;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用</span></span><br><span class="line"><span class="meta">@override</span></span><br><span class="line"><span class="keyword">void</span> initState() &#123;</span><br><span class="line">    _controller = AnimationController(</span><br><span class="line">        duration: <span class="keyword">const</span> <span class="built_in">Duration</span>(seconds: <span class="number">10</span>),</span><br><span class="line">        vsync: <span class="keyword">this</span>,</span><br><span class="line">    )..repeat();</span><br><span class="line">    <span class="keyword">super</span>.initState();</span><br><span class="line">&#125;</span><br><span class="line">SpinningContainer(controller: _controller);</span><br></pre></td></tr></table></figure>
+<!DOCTYPE html>
+<html lang="<%= config.language %>" color-mode="light">
 
+  <%- partial('_partial/header') %>
 
+  <body>
+    <div id="app">
+      <%- partial('_partial/navigation') %>
 
+      <div class="flex-container">
+        <%- body %>
+        <%- partial('_partial/footer') %>
+      </div>
 
+      <div class="tools-bar">
+        <%- partial('_partial/backtotop') %>
 
-</article><div id="paginator"></div></main><footer><div class="icon-wrapper in-left"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg></span></button></div><div class="icon-wrapper in-right"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg></span></button></div><p class="copyright-text"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">CC BY-NC-SA 4.0</a><span>·</span><a href="https://github.com/ttttonyhe/ouorz-mono" target="_blank" rel="noreferrer">Open Source Software (OSS)</a></p></footer><script src="/js/ouo.js"></script></div></body></html>
+        <%- partial('_partial/search') %>
+
+        <%- partial('_partial/colorscheme') %>
+
+        <%- partial('_partial/shares') %>
+      </div>
+    </div>
+  </body>
+</html>

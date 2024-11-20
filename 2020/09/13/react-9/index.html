@@ -1,12 +1,26 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>前端学习之React报错指北 [ Mahoo12138 ]</title><link rel="stylesheet" href="/css/index.css"><meta name="post"><link rel="stylesheet" href="/css/layouts/post.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="hexo-container"><header></header><main id="content"><article id="post"><h1>前端学习之React报错指北</h1><blockquote>
-<p>Maximum update depth exceeded. This can happen when a component repeatedly calls setState inside componentWillUpdate or componentDidUpdate. React limits the number of nested updates to prevent infinite loops.</p>
-</blockquote>
-<p>报错含义大概是：超出最大更新深度。 当组件在 componentWillUpdate 或 componentDidUpdate 中重复调用 setState 时，就会发生这种情况。 React 限制嵌套更新的数量以防止无限循环。</p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">render</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;child&quot;</span>&gt;</span>子组件</span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">button</span> <span class="attr">onClick</span>=<span class="string">&#123;this.props.getData(this.state.data)&#125;</span>&gt;</span>发送数据<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">  )</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 父组件传来的函数</span></span><br><span class="line">receiveData = <span class="function">(<span class="params">params</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">this</span>.<span class="title function_">setState</span>(&#123;</span><br><span class="line">    <span class="attr">data</span>: params</span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`params`</span>, params)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<!DOCTYPE html>
+<html lang="<%= config.language %>" color-mode="light">
 
-<p>因为在按钮的事件里，我们给函数传参，加了括号<code>this.props.getData(this.state.data)</code>，代表函数立即执行；</p>
-<p>在<code>render()</code>中是不能使用<code>setState</code>的，因为<code>setState</code>造成<code>state</code>改变，<code>state</code>改变就会重新渲染<code>render</code>，每次<code>render</code>又会<code>setState</code>，就会造成页面死循环。</p>
-<p>想想就很容易理解，所以解决这个问题，应该传入一个函数指针，可以写成箭头函数，或者在组件里再添加一个方法：</p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">emitData = <span class="function">()=&gt;</span>&#123;</span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">props</span>.<span class="title function_">getData</span>(<span class="variable language_">this</span>.<span class="property">state</span>.<span class="property">data</span>)</span><br><span class="line">&#125;</span><br><span class="line">&lt;button onClick=&#123;<span class="variable language_">this</span>.<span class="property">emitData</span>&#125;&gt;发送数据&lt;/button&gt;</span><br></pre></td></tr></table></figure>
+  <%- partial('_partial/header') %>
 
-</article><div id="paginator"></div></main><footer><div class="icon-wrapper in-left"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg></span></button></div><div class="icon-wrapper in-right"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg></span></button></div><p class="copyright-text"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">CC BY-NC-SA 4.0</a><span>·</span><a href="https://github.com/ttttonyhe/ouorz-mono" target="_blank" rel="noreferrer">Open Source Software (OSS)</a></p></footer><script src="/js/ouo.js"></script></div></body></html>
+  <body>
+    <div id="app">
+      <%- partial('_partial/navigation') %>
+
+      <div class="flex-container">
+        <%- body %>
+        <%- partial('_partial/footer') %>
+      </div>
+
+      <div class="tools-bar">
+        <%- partial('_partial/backtotop') %>
+
+        <%- partial('_partial/search') %>
+
+        <%- partial('_partial/colorscheme') %>
+
+        <%- partial('_partial/shares') %>
+      </div>
+    </div>
+  </body>
+</html>

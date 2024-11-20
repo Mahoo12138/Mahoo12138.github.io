@@ -1,37 +1,26 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Hexo个人博客SEO优化指南 [ Mahoo12138 ]</title><link rel="stylesheet" href="/css/index.css"><meta name="post"><link rel="stylesheet" href="/css/layouts/post.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="hexo-container"><header></header><main id="content"><article id="post"><h1>Hexo个人博客SEO优化指南</h1><h2 id="安装sitemap"><a href="#安装sitemap" class="headerlink" title="安装sitemap"></a>安装sitemap</h2><ol>
-<li>Windows环境下直接在博客根目录打开<code>Git Bash</code>，运行命令：</li>
-</ol>
-  <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-generator-sitemap --save </span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">sitemap.xml	提交给谷歌搜素引擎</span></span><br><span class="line">npm install hexo-generator-baidu-sitemap --save </span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">baidusitemap.xml	提交百度搜索引擎</span></span><br></pre></td></tr></table></figure>
+<!DOCTYPE html>
+<html lang="<%= config.language %>" color-mode="light">
 
-<ol start="2">
-<li>在站点配置文件<code>_config.yml</code>中添加以下代码：</li>
-</ol>
-   <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Plugins:</span><br><span class="line">- hexo-generator-baidu-sitemap</span><br><span class="line">- hexo-generator-sitemap</span><br><span class="line"></span><br><span class="line">baidusitemap:</span><br><span class="line">    path: baidusitemap.xml</span><br><span class="line">sitemap:</span><br><span class="line">    path: sitemap.xml</span><br></pre></td></tr></table></figure>
+  <%- partial('_partial/header') %>
 
-<ol start="3">
-<li><p>修改站点配置文件<code>_config.yml</code>，添加<code>url</code>，其次就是Hexo文章默认的链接是<code>:year/:month/:day/:title/</code>这样的链接对SEO十分不友好，所以应改成<code>title.html</code>格式：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">URL</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"><span class="comment"># If your site is put in a subdirectory, set url as &#x27;http://yoursite.com/child&#x27; and root as &#x27;/child/&#x27;</span></span></span><br><span class="line">url: http://mahoo12138.github.io</span><br><span class="line">permalink: :title.html</span><br><span class="line">permalink_defaults:</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>Hexo编译，提交站长平台</p>
-<p><code>Hexo g &amp;&amp; hexo d</code>后会在&#x2F;public目录下生成<code>sitemap.xml</code>和<code>baidusitemap.xml</code>，这就是站点地图。 之后就可以提交到各大站长平台了。</p>
-</li>
-</ol>
-<h2 id="添加关键词"><a href="#添加关键词" class="headerlink" title="添加关键词"></a>添加关键词</h2><h3 id="站点关键词"><a href="#站点关键词" class="headerlink" title="站点关键词"></a>站点关键词</h3><p> 在博客根目录下找到<code>_config.yml</code>文件，在所示地方添加<code>keywords: 关键字1,关键字2,关键字3…</code>，采用<code>英文逗号</code>隔开，注意<code>keywords</code>与<code>关键词</code>之间的<code>空格</code>。 </p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">title: Mahoo Blog</span><br><span class="line">subtitle: 记录技术成长的每一瞬间</span><br><span class="line">description: 一切的恐惧都来源于无知！</span><br><span class="line">keywords: 老黄博客,Mahoo Blog,Stm32,Mahoo,Mahoo12138</span><br><span class="line">author: Mahoo Huang</span><br><span class="line">language: zh-CN</span><br></pre></td></tr></table></figure>
+  <body>
+    <div id="app">
+      <%- partial('_partial/navigation') %>
 
-<h3 id="文章关键词"><a href="#文章关键词" class="headerlink" title="文章关键词"></a>文章关键词</h3><p> 打开主题路径内的<code>head.ejs</code>文件，不同主题所在路径和文件都可能不同，Next主题是 <code>head.swig</code>，我的主题是<code>head.ejs</code>，添加如下代码：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># next theme   head.swig</span><br><span class="line">&#123;% if page.keywords %&#125;</span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;keywords&quot;</span> <span class="attr">content</span>=<span class="string">&quot;&#123;&#123; page.keywords &#125;&#125;&quot;</span> /&gt;</span></span><br><span class="line">&#123;% elif page.tags and page.tags.length %&#125;</span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;keywords&quot;</span> <span class="attr">content</span>=<span class="string">&quot;&#123;% for tag in page.tags %&#125;&#123;&#123; tag.name &#125;&#125;,&#123;% endfor %&#125;&quot;</span> /&gt;</span></span><br><span class="line">&#123;% elif theme.keywords %&#125;</span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;keywords&quot;</span> <span class="attr">content</span>=<span class="string">&quot;&#123;&#123; theme.keywords &#125;&#125;&quot;</span> /&gt;</span></span><br><span class="line">&#123;% endif %&#125;</span><br><span class="line"></span><br><span class="line"># matery theme	head.ejs</span><br><span class="line"> &lt;% if (page.keywords)&#123; %&gt;</span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;keywords&quot;</span> <span class="attr">content</span>=<span class="string">&quot;&lt;%- page.keywords %&gt;&quot;</span> /&gt;</span></span><br><span class="line"> &lt;% &#125; else if (theme.keywords)&#123; %&gt;</span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;keywords&quot;</span> <span class="attr">content</span>=<span class="string">&quot;&lt;%- theme.keywords %&gt;&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+      <div class="flex-container">
+        <%- body %>
+        <%- partial('_partial/footer') %>
+      </div>
 
-<p>添加上述代码后，主要是检测文章内是否有关键词，之后还要在<code>\scaffolds\post.md</code>中 添加：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">keywords: </span><br></pre></td></tr></table></figure>
+      <div class="tools-bar">
+        <%- partial('_partial/backtotop') %>
 
-<p> 就可以在新写的文件里添加keyword，格式为[keyword1,keyword2,keyword3] 。</p>
-<h2 id="配置robots-txt"><a href="#配置robots-txt" class="headerlink" title="配置robots.txt"></a>配置robots.txt</h2><blockquote>
-<p> <strong>robots.txt</strong>（统一小写）是一种存放于<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E7%BD%91%E7%AB%99">网站</a>根目录下的<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/ASCII">ASCII</a>编码的<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E6%96%87%E6%9C%AC%E6%96%87%E4%BB%B6">文本文件</a>，它通常告诉网络<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E">搜索引擎</a>的漫游器（又称<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E7%BD%91%E7%BB%9C%E8%9C%98%E8%9B%9B">网络蜘蛛</a>），此网站中的哪些内容是不应被搜索引擎的漫游器获取的，哪些是可以被漫游器获取的。因为一些系统中的URL是大小写敏感的，所以robots.txt的文件名应统一为小写。robots.txt应放置于网站的根目录下。如果想单独定义搜索引擎的漫游器访问子目录时的行为，那么可以将自定的设置合并到根目录下的robots.txt，或者使用robots<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%85%83%E6%95%B0%E6%8D%AE">元数据</a>（Metadata，又称元资料） 。</p>
-</blockquote>
-<p>简单来说，它就是网站和爬虫之间的协议，规定了哪些文件可以访问，哪些文件禁止访问。</p>
-<p>在博客根目录下的<code>source</code>新建<code>robots.txt</code>写入：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">User-agent: *</span><br><span class="line">Allow: /</span><br><span class="line">Allow: /home/</span><br><span class="line">Allow: /archives/</span><br><span class="line">Allow: /about/</span><br><span class="line"></span><br><span class="line">Disallow: /vendors/</span><br><span class="line">Disallow: /js/</span><br><span class="line">Disallow: /css/</span><br><span class="line">Disallow: /fonts/</span><br><span class="line">Disallow: /vendors/</span><br><span class="line">Sitemap: http://lansus.coding.me/sitemap.xml</span><br><span class="line">Sitemap: http://lansus.coding.me/baidusitemap.xml</span><br></pre></td></tr></table></figure>
+        <%- partial('_partial/search') %>
 
-<p> 在编译后这个文件会出现在<code>blog/public</code>中 ，控制的就是该目录下的文件。</p>
-</article><div id="paginator"></div></main><footer><div class="icon-wrapper in-left"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg></span></button></div><div class="icon-wrapper in-right"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg></span></button></div><p class="copyright-text"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">CC BY-NC-SA 4.0</a><span>·</span><a href="https://github.com/ttttonyhe/ouorz-mono" target="_blank" rel="noreferrer">Open Source Software (OSS)</a></p></footer><script src="/js/ouo.js"></script></div></body></html>
+        <%- partial('_partial/colorscheme') %>
+
+        <%- partial('_partial/shares') %>
+      </div>
+    </div>
+  </body>
+</html>

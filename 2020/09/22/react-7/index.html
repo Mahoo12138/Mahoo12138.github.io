@@ -1,32 +1,26 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>前端学习之React中的组件复用 [ Mahoo12138 ]</title><link rel="stylesheet" href="/css/index.css"><meta name="post"><link rel="stylesheet" href="/css/layouts/post.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="hexo-container"><header></header><main id="content"><article id="post"><h1>前端学习之React中的组件复用</h1><h2 id="render-props-模式"><a href="#render-props-模式" class="headerlink" title="render props 模式"></a>render props 模式</h2><p><strong>render prop</strong> 是指一种在 React 组件的 render 方法使用一个值为函数的 prop （该函数返回一个React 元素）以共享代码的简单技术；</p>
-<ul>
-<li>在需要被复用的组件内，提供复用的状态逻辑代码，如状态和操作状态的方法；</li>
-<li>将复用的状态作为传入组件的 render 方法的参数，暴露到组件外；</li>
-<li>组件使用时，传入 React 元素，并根据状态做各种不同需求的定制；</li>
-</ul>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;<span class="title class_">Mouse</span> render=&#123;<span class="function"><span class="params">mouse</span> =&gt;</span> (</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;<span class="name">Component</span> &#123;<span class="attr">...this.props</span>&#125; <span class="attr">mouse</span>=<span class="string">&#123;mouse&#125;</span> /&gt;</span></span></span><br><span class="line">  )&#125;/&gt;</span><br></pre></td></tr></table></figure>
+<!DOCTYPE html>
+<html lang="<%= config.language %>" color-mode="light">
 
-<h3 id="children-代替-render-属性"><a href="#children-代替-render-属性" class="headerlink" title="children 代替 render 属性"></a>children 代替 render 属性</h3><p>使用 children 子节点作为函数传入，更显直观，也就是直接放置到元素的<em>内部</em>：</p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;<span class="title class_">Mouse</span>&gt;</span><br><span class="line">  &#123;<span class="function"><span class="params">mouse</span> =&gt;</span> (</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;<span class="name">p</span>&gt;</span>鼠标的位置是 &#123;mouse.x&#125;，&#123;mouse.y&#125;<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line">  )&#125;</span><br><span class="line">&lt;/<span class="title class_">Mouse</span>&gt;</span><br></pre></td></tr></table></figure>
+  <%- partial('_partial/header') %>
 
-<p>由此我们可以想到在 Context 传参时的 Consumer，也是一种使用 children 的 render props 模式的做法；</p>
-<h3 id="children-校验"><a href="#children-校验" class="headerlink" title="children 校验"></a>children 校验</h3><p>推荐使用 propsTypes 给 render props 模式添加 props 校验：</p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Mouse</span>.<span class="property">propTypes</span> = &#123;</span><br><span class="line">  <span class="attr">children</span>: <span class="title class_">PropTypes</span>.<span class="property">func</span>.<span class="property">isRequired</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+  <body>
+    <div id="app">
+      <%- partial('_partial/navigation') %>
 
-<h2 id="高阶组件（HOC）"><a href="#高阶组件（HOC）" class="headerlink" title="高阶组件（HOC）"></a>高阶组件（HOC）</h2><p>高阶组件（Higher-Order Component）是 React 中用于复用组件逻辑的一种高级技巧。HOC 自身不是 React API 的一部分，它是一种基于 React 的组合特性而形成的设计模式（包装&#x2F;装饰模式）；</p>
-<p>实际上，高阶组件是一个<strong>参数为组件，返回值为新组件的函数</strong>，  其内部会创建一个类组件，在类组件中土工复用的状态逻辑，通过 props 将复用状态传递给被包装组件；</p>
-<ul>
-<li>创建一个函数，名称约定以 with 开头；</li>
-<li>指定函数参数，参数应该以大写字母开头（作为要渲染的组件）；</li>
-<li>在函数内部创建一个类组件，提供父用的状态逻辑代码，并返回；</li>
-<li>在新创建的类组件中，渲染参数组件，同时将状态通过 props 传递到参数组件；</li>
-<li>调用高阶组件，传入需要增强的组件，把返回值作为组件渲染；</li>
-</ul>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">withMouse</span>(<span class="params">WrappedComponent</span>)&#123;</span><br><span class="line">  <span class="keyword">class</span> <span class="title class_">Mouse</span> <span class="keyword">extends</span> <span class="title class_ inherited__">React.Component</span>&#123;</span><br><span class="line">    state = &#123;&#125;</span><br><span class="line"> 		<span class="title function_">render</span>(<span class="params"></span>)&#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="language-xml"><span class="tag">&lt;<span class="name">WrappedComponent</span> &#123;<span class="attr">...this.state</span>&#125;/&gt;</span></span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> <span class="title class_">MousePosition</span> = <span class="title function_">withMouse</span>(<span class="title class_">Position</span>);</span><br><span class="line"><span class="comment">// &lt;MousePosition/&gt;</span></span><br></pre></td></tr></table></figure>
+      <div class="flex-container">
+        <%- body %>
+        <%- partial('_partial/footer') %>
+      </div>
 
-<h3 id="设置-displayName"><a href="#设置-displayName" class="headerlink" title="设置 displayName"></a>设置 displayName</h3><p>同一个高阶组件，装饰&#x2F;包装后的组件，在渲染到页面后，其组件名称是相同的，因为默认情况下，React 使用组件名称作为 displayName；</p>
-<p>为了更好地使用 React Developer Tools 工具进行调试，我们需要区分这些组件：</p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Mouse</span>.<span class="property">displayName</span> = <span class="string">`WithMouse<span class="subst">$&#123;getDisplayName(WrappedComponent)&#125;</span>`</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">getDisplayName</span>(<span class="params">WrappedComponent</span>)&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="title class_">WrappedComponent</span>.<span class="property">displayName</span> || <span class="title class_">WrappedComponent</span>.<span class="property">name</span> || <span class="string">&#x27;Component&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      <div class="tools-bar">
+        <%- partial('_partial/backtotop') %>
 
-<h3 id="无法透传-props"><a href="#无法透传-props" class="headerlink" title="无法透传 props"></a>无法透传 props</h3><p>在使用高阶组件返回的组件时，如果传入了 props，高阶组件内部并没有将该props 继续传入到内部的类组件，而是只传递了 state ，解决方法也很简单，一起传入即可：</p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">render</span>(<span class="params"></span>)&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="language-xml"><span class="tag">&lt;<span class="name">WrappedComponent</span> &#123;<span class="attr">...this.state</span>&#125; &#123;<span class="attr">...this.props</span>&#125;/&gt;</span></span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></article><div id="paginator"></div></main><footer><div class="icon-wrapper in-left"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg></span></button></div><div class="icon-wrapper in-right"><button class="icon-button" aria-label="change theme"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height="100%" width="100%"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg></span></button></div><p class="copyright-text"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">CC BY-NC-SA 4.0</a><span>·</span><a href="https://github.com/ttttonyhe/ouorz-mono" target="_blank" rel="noreferrer">Open Source Software (OSS)</a></p></footer><script src="/js/ouo.js"></script></div></body></html>
+        <%- partial('_partial/search') %>
+
+        <%- partial('_partial/colorscheme') %>
+
+        <%- partial('_partial/shares') %>
+      </div>
+    </div>
+  </body>
+</html>
